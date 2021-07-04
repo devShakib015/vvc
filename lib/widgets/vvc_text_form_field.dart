@@ -9,7 +9,9 @@ class VvcTextFormField extends StatelessWidget {
   final String? Function(String?)? onValidate;
   final String label;
   final IconData? icon;
+  final Widget? suffixIcon;
   final TextInputType textInputType;
+  final bool obscure;
 
   const VvcTextFormField({
     Key? key,
@@ -17,7 +19,9 @@ class VvcTextFormField extends StatelessWidget {
     this.onchanged,
     this.onValidate,
     required this.label,
+    this.obscure = false,
     this.icon,
+    this.suffixIcon,
     this.textInputType = TextInputType.text,
   }) : super(key: key);
 
@@ -28,18 +32,20 @@ class VvcTextFormField extends StatelessWidget {
       cursorColor: VvcColors.primaryColor2,
       onChanged: onchanged,
       validator: onValidate,
+      obscureText: obscure,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: textInputType,
       decoration: VvcStyle.inputDecoration.copyWith(
         labelText: label,
         labelStyle: TextStyle(
-          color: VvcColors.primaryColor1,
+          color: VvcColors.primaryColor2,
         ),
+        suffixIcon: suffixIcon == null ? null : suffixIcon,
         prefixIcon: icon == null
             ? null
             : Icon(
                 icon,
-                color: VvcColors.primaryColor1,
+                color: VvcColors.primaryColor2,
               ),
       ),
     );

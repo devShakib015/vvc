@@ -1,10 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vvc/constants/color_constants.dart';
 
 class VvcStyle {
   VvcStyle._();
+
+  static final EdgeInsetsGeometry defaultSidePadding =
+      EdgeInsets.symmetric(horizontal: 16);
+
+  static final double defaultScreenHeight =
+      Get.size.height - (Get.size.height * 0.1);
+
+  static final double halfScreenWidth = Get.size.width / 2;
+
+  static final Widget defaultVerticalSpacer = SizedBox(
+    height: 15,
+  );
+
+  static final Widget defaultHorizontalSpacer = SizedBox(
+    width: 15,
+  );
 
   static const TextStyle textStyle = TextStyle(
     color: Colors.white,
@@ -27,7 +44,7 @@ class VvcStyle {
   static final inputDecoration = InputDecoration(
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: VvcColors.primaryColor1,
+        color: VvcColors.primaryColor2,
       ),
       borderRadius: BorderRadius.circular(10),
     ),
@@ -39,7 +56,7 @@ class VvcStyle {
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: VvcColors.primaryColor2,
+        color: VvcColors.primaryColor1,
       ),
       borderRadius: BorderRadius.circular(10),
     ),
@@ -51,7 +68,7 @@ class VvcStyle {
     ),
     border: OutlineInputBorder(
       borderSide: BorderSide(
-        color: VvcColors.primaryColor1,
+        color: VvcColors.primaryColor2,
       ),
       borderRadius: BorderRadius.circular(10),
     ),

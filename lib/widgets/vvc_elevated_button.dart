@@ -97,14 +97,23 @@ class VvcElevatedButton extends StatelessWidget {
   static Widget icon({
     required Icon icon,
     required VoidCallback onPressed,
+    required String tooltip,
   }) {
-    return VvcElevatedButton(
-      borderRadius: 50,
-      padding: EdgeInsets.zero,
-      width: 55,
-      height: 55,
-      child: icon,
-      onPressed: onPressed,
+    return Tooltip(
+      decoration: BoxDecoration(
+        color: VvcColors.primaryColor1.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      textStyle: TextStyle(color: Colors.white),
+      message: tooltip,
+      child: VvcElevatedButton(
+        borderRadius: 50,
+        padding: EdgeInsets.zero,
+        width: 55,
+        height: 55,
+        child: icon,
+        onPressed: onPressed,
+      ),
     );
   }
 }

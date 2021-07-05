@@ -61,6 +61,7 @@ class VvcElevatedButton extends StatelessWidget {
         ),
       ),
       onPressed: onPressed,
+      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
     );
   }
 
@@ -80,7 +81,7 @@ class VvcElevatedButton extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -91,6 +92,7 @@ class VvcElevatedButton extends StatelessWidget {
         ],
       ),
       onPressed: onPressed,
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     );
   }
 

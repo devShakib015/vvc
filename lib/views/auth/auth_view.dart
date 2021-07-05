@@ -17,13 +17,19 @@ class AuthView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: VvcColors.bgColor,
-      body: Container(
+      body: SafeArea(
         child: PageView(
           physics: NeverScrollableScrollPhysics(),
           controller: _authPageController.pageController,
           children: [
-            LoginPage(),
-            SignUpPage(),
+            LoginPage(
+              authController: _authController,
+              authPageController: _authPageController,
+            ),
+            SignUpPage(
+              authController: _authController,
+              authPageController: _authPageController,
+            ),
           ],
         ),
       ),

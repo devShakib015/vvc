@@ -11,7 +11,7 @@ class VvcStyle {
       EdgeInsets.symmetric(horizontal: 16);
 
   static final double defaultScreenHeight =
-      Get.size.height - (Get.size.height * 0.1);
+      Get.size.height - (Get.size.height * 0.08);
 
   static final double halfScreenWidth = Get.size.width / 2;
 

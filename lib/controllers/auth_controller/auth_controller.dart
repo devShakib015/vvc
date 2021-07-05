@@ -9,6 +9,7 @@ class AuthController extends GetxController {
       snackPosition: SnackPosition.BOTTOM,
     );
     await Future.delayed(Duration(seconds: 3));
+
     print("Done!");
   }
 

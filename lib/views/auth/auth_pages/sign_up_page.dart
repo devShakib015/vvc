@@ -7,6 +7,7 @@ import 'package:vvc/constants/style_constants.dart';
 import 'package:vvc/controllers/auth_controller/auth_page_controller.dart';
 import 'package:vvc/widgets/vvc_elevated_button.dart';
 import 'package:vvc/widgets/vvc_heading.dart';
+import 'package:vvc/widgets/vvc_small_text.dart';
 
 import 'package:vvc/widgets/vvc_sub_heading.dart';
 import 'package:vvc/widgets/vvc_text_form_field.dart';
@@ -122,8 +123,10 @@ class SignUpPage extends StatelessWidget {
                               }
                             },
                           )),
+
+                      _signUpCheckBoxes(),
                       VvcStyle.defaultVerticalSpacer,
-                      VvcStyle.defaultVerticalSpacer,
+
                       VvcElevatedButton.text(
                         label: "Sign Up",
                         onPressed: _authPageController.onPressedSignUp,
@@ -149,6 +152,42 @@ class SignUpPage extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Obx _signUpCheckBoxes() {
+    return Obx(
+      () => Column(
+        children: [
+          Row(
+            children: [
+              Checkbox(
+                value: _authPageController.getRememberMe,
+                onChanged: (value) {
+                  _authPageController.setRememberMe = value!;
+                },
+              ),
+              VvcSmallText(text: "Remember Me!")
+            ],
+          ),
+          Row(
+            children: [
+              Checkbox(
+                value: _authPageController.isAcceptedPrivacyPolicy.value,
+                onChanged: (value) {
+                  _authPageController.isAcceptedPrivacyPolicy.value = value!;
+                },
+              ),
+              Flexible(
+                child: VvcSmallText(
+                  text:
+                      "By Selecting this checkbox you are agree with our privacy policy!",
+                ),
+              )
+            ],
+          )
+        ],
       ),
     );
   }

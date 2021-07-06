@@ -7,6 +7,7 @@ import 'package:vvc/constants/style_constants.dart';
 import 'package:vvc/controllers/auth_controller/auth_page_controller.dart';
 import 'package:vvc/widgets/vvc_elevated_button.dart';
 import 'package:vvc/widgets/vvc_heading.dart';
+import 'package:vvc/widgets/vvc_small_text.dart';
 import 'package:vvc/widgets/vvc_sub_heading.dart';
 import 'package:vvc/widgets/vvc_text_form_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -91,20 +92,40 @@ class LoginPage extends StatelessWidget {
                         label: "Login",
                         onPressed: _authPageController.onPressedLogin,
                       ),
+                      VvcStyle.defaultVerticalSpacer,
 
                       Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          VvcSubHeading(text: "Forgot Password? "),
-                          GestureDetector(
-                            onTap: () {
-                              //todo: Reset Password
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              child: VvcSubHeading(text: "Reset Here!"),
-                            ),
-                          )
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Obx(() => Checkbox(
+                                    value: _authPageController.getRememberMe,
+                                    onChanged: (value) {
+                                      _authPageController.setRememberMe =
+                                          value!;
+                                    },
+                                  )),
+                              VvcSmallText(text: "Remember Me!"),
+                            ],
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              VvcSmallText(text: "Forgot Password? "),
+                              GestureDetector(
+                                onTap: () {
+                                  //todo: Reset Password
+                                },
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  child: VvcSmallText(text: "Reset Here!"),
+                                ),
+                              )
+                            ],
+                          ),
                         ],
                       ),
 

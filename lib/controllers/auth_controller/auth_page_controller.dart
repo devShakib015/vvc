@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:vvc/controllers/auth_controller/auth_controller.dart';
+import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/views/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:vvc/widgets/vvc_snackbar.dart';
 
 class AuthPageController extends GetxController {
   final PageController pageController = PageController();
-
-  final AuthController _authController = Get.find<AuthController>();
+  final AuthController _authController = Get.put(AuthController());
+  final StorageController _storageController = Get.find<StorageController>();
 
   //Form keys
   final loginFormKey = GlobalKey<FormState>();
@@ -23,14 +24,28 @@ class AuthPageController extends GetxController {
   TextEditingController signUpConfirmPasswordController =
       TextEditingController();
 
+  //Obscure Fields
   RxBool loginPasswordObscure = true.obs;
   RxBool signUpPasswordObscure = true.obs;
   RxBool signUpConfirmPasswordObscure = true.obs;
 
+  //Remeber Me values
+  bool get getRememberMe => _authController.remeberLoginInfo.value;
+
+  set setRememberMe(bool value) {
+    _authController.remeberLoginInfo.value = value;
+  }
+
+  //Privacy Policy
+  RxBool isAcceptedPrivacyPolicy = false.obs;
+
   void onPressedLogin() async {
     //todo: Login
     if (loginFormKey.currentState!.validate()) {
-      await _authController.login();
+      await _authController.login(
+        loginEmailController.text.trim(),
+        loginPasswordController.text.trim(),
+      );
       clearFields();
       Get.to(() => BottomNavBarPage());
     } else {
@@ -40,10 +55,21 @@ class AuthPageController extends GetxController {
 
   void onPressedSignUp() async {
     //todo: Sign Up
+
     if (signUpFormKey.currentState!.validate()) {
-      await _authController.signUp();
-      clearFields();
-      Get.to(() => BottomNavBarPage());
+      if (isAcceptedPrivacyPolicy.value) {
+        await _authController.signUp(
+          signUpEmailController.text.trim(),
+          signUpPasswordController.text.trim(),
+        );
+        clearFields();
+        Get.to(() => BottomNavBarPage());
+      } else {
+        VvcSnackBar.showSnackBar(
+            title: "Privacy Policy",
+            message:
+                "Please read and accept our privacy policy and then try to sign up!");
+      }
     } else {
       VvcSnackBar.showErrorSnackBar(message: "Sign Up Error");
     }
@@ -72,6 +98,21 @@ class AuthPageController extends GetxController {
     signUpEmailController.clear();
     signUpPasswordController.clear();
     signUpConfirmPasswordController.clear();
+  }
+
+  @override
+  void onReady() {
+    if (_storageController.savedEmail != null &&
+        _storageController.savedPassword != null) {
+      loginEmailController.text = _storageController.savedEmail!;
+      loginPasswordController.text = _storageController.savedPassword!;
+    }
+    super.onReady();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
   }
 
   @override

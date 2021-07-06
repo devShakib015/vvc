@@ -23,11 +23,9 @@ class AuthView extends StatelessWidget {
           controller: _authPageController.pageController,
           children: [
             LoginPage(
-              authController: _authController,
               authPageController: _authPageController,
             ),
             SignUpPage(
-              authController: _authController,
               authPageController: _authPageController,
             ),
           ],

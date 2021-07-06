@@ -14,4 +14,6 @@ class VvcColors {
   static const Color mainLightColor = Color(0xFFD6DBE4);
 
   static const Color bgColor = Color(0xff011925);
+
+  static const Color errorColor = Color(0xFF830000);
 }

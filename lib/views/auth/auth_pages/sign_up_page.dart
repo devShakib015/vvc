@@ -4,23 +4,20 @@ import 'package:get/get.dart';
 import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/constants/image_constants.dart';
 import 'package:vvc/constants/style_constants.dart';
-import 'package:vvc/controllers/auth_controller/auth_controller.dart';
 import 'package:vvc/controllers/auth_controller/auth_page_controller.dart';
 import 'package:vvc/widgets/vvc_elevated_button.dart';
 import 'package:vvc/widgets/vvc_heading.dart';
+
 import 'package:vvc/widgets/vvc_sub_heading.dart';
 import 'package:vvc/widgets/vvc_text_form_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignUpPage extends StatelessWidget {
-  final AuthController _authController;
   final AuthPageController _authPageController;
 
   SignUpPage({
-    required authController,
     required authPageController,
-  })  : this._authController = authController,
-        this._authPageController = authPageController;
+  }) : this._authPageController = authPageController;
 
   @override
   Widget build(BuildContext context) {
@@ -128,25 +125,16 @@ class SignUpPage extends StatelessWidget {
                       VvcStyle.defaultVerticalSpacer,
                       VvcStyle.defaultVerticalSpacer,
                       VvcElevatedButton.text(
-                          label: "Sign Up",
-                          onPressed: () async {
-                            //todo: Login
-                            await _authController.signUp();
-                            _authPageController.clearFields();
-                          }),
+                        label: "Sign Up",
+                        onPressed: _authPageController.onPressedSignUp,
+                      ),
 
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           VvcSubHeading(text: "Already A User? "),
                           GestureDetector(
-                            onTap: () {
-                              _authPageController.clearFields();
-                              _authPageController.pageController.previousPage(
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.ease,
-                              );
-                            },
+                            onTap: _authPageController.goToLoginPage,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               child: VvcSubHeading(text: "Log In!"),

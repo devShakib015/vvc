@@ -4,9 +4,7 @@ import 'package:get/get.dart';
 import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/constants/image_constants.dart';
 import 'package:vvc/constants/style_constants.dart';
-import 'package:vvc/controllers/auth_controller/auth_controller.dart';
 import 'package:vvc/controllers/auth_controller/auth_page_controller.dart';
-import 'package:vvc/utils/main_page.dart';
 import 'package:vvc/widgets/vvc_elevated_button.dart';
 import 'package:vvc/widgets/vvc_heading.dart';
 import 'package:vvc/widgets/vvc_sub_heading.dart';
@@ -14,14 +12,11 @@ import 'package:vvc/widgets/vvc_text_form_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatelessWidget {
-  final AuthController _authController;
   final AuthPageController _authPageController;
 
   LoginPage({
-    required authController,
     required authPageController,
-  })  : this._authController = authController,
-        this._authPageController = authPageController;
+  }) : this._authPageController = authPageController;
 
   @override
   Widget build(BuildContext context) {
@@ -93,22 +88,9 @@ class LoginPage extends StatelessWidget {
                       VvcStyle.defaultVerticalSpacer,
                       VvcStyle.defaultVerticalSpacer,
                       VvcElevatedButton.text(
-                          label: "Login",
-                          onPressed: () async {
-                            //todo: Login
-                            if (_authPageController.loginFormKey.currentState!
-                                .validate()) {
-                              await _authController.login();
-                              _authPageController.clearFields();
-                              Get.to(() => MainPage());
-                            } else {
-                              Get.snackbar(
-                                "Login Error",
-                                "Please verify the fields",
-                                snackPosition: SnackPosition.BOTTOM,
-                              );
-                            }
-                          }),
+                        label: "Login",
+                        onPressed: _authPageController.onPressedLogin,
+                      ),
 
                       Row(
                         mainAxisSize: MainAxisSize.min,
@@ -162,17 +144,12 @@ class LoginPage extends StatelessWidget {
                           VvcSubHeading(text: "New User?"),
                           VvcStyle.defaultHorizontalSpacer,
                           GestureDetector(
-                            onTap: () {
-                              _authPageController.clearFields();
-                              _authPageController.pageController.nextPage(
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.ease,
-                              );
-                            },
+                            onTap: _authPageController.goToSignUpPage,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 16),
-                              child:
-                                  VvcSubHeading(text: "Sign Up using Email!"),
+                              child: VvcSubHeading(
+                                text: "Sign Up using Email!",
+                              ),
                             ),
                           )
                         ],

@@ -1,26 +1,20 @@
 import 'package:get/get.dart';
+import 'package:vvc/widgets/vvc_dialog.dart';
 
 class AuthController extends GetxController {
   Future<void> login() async {
-    Get.snackbar(
-      "Login",
-      "Please wait!",
-      duration: Duration(seconds: 2),
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    VvcDialog.showLoading();
     await Future.delayed(Duration(seconds: 3));
+    VvcDialog.hideLoading();
 
     print("Done!");
   }
 
   Future<void> signUp() async {
-    Get.snackbar(
-      "Sign Up",
-      "Please wait!",
-      duration: Duration(seconds: 2),
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    VvcDialog.showLoading();
     await Future.delayed(Duration(seconds: 3));
+    VvcDialog.hideLoading();
+
     print("Done!");
   }
 }

@@ -13,11 +13,15 @@ class AuthPageController extends GetxController {
 
   //Form keys
   final loginFormKey = GlobalKey<FormState>();
+  final resetPassFormKey = GlobalKey<FormState>();
   final signUpFormKey = GlobalKey<FormState>();
 
   //Login Text Editing Controller
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
+
+  //Reset Password Text Editing Controller
+  TextEditingController resetPasswordEmailController = TextEditingController();
 
   //Sign Up Text Editing Controller
   TextEditingController signUpEmailController = TextEditingController();
@@ -41,7 +45,6 @@ class AuthPageController extends GetxController {
   RxBool isAcceptedPrivacyAndTerms = false.obs;
 
   void onPressedLogin() async {
-    //todo: Login
     if (loginFormKey.currentState!.validate()) {
       await _authController.login(
         loginEmailController.text.trim(),
@@ -49,14 +52,19 @@ class AuthPageController extends GetxController {
       );
       clearFields();
       Get.to(() => BottomNavBarPage());
-    } else {
-      VvcSnackBar.showErrorSnackBar(message: "Login Error!");
+    }
+  }
+
+  void onPressedResetPassword() async {
+    if (resetPassFormKey.currentState!.validate()) {
+      await _authController
+          .resetPassword(resetPasswordEmailController.text.trim());
+      clearFields();
+      Get.back();
     }
   }
 
   void onPressedSignUp() async {
-    //todo: Sign Up
-
     if (signUpFormKey.currentState!.validate()) {
       if (isAcceptedPrivacyAndTerms.value) {
         await _authController.signUp(
@@ -67,12 +75,11 @@ class AuthPageController extends GetxController {
         Get.to(() => BottomNavBarPage());
       } else {
         VvcSnackBar.showSnackBar(
-            title: "Privacy, Terms and Condtions",
-            message:
-                "Please read and accept our privacy policy and terms to create an account!");
+          title: "Privacy, Terms and Condtions",
+          message:
+              "Please read and accept our privacy policy and terms to create an account!",
+        );
       }
-    } else {
-      VvcSnackBar.showErrorSnackBar(message: "Sign Up Error");
     }
   }
 
@@ -96,6 +103,7 @@ class AuthPageController extends GetxController {
   void clearFields() {
     loginEmailController.clear();
     loginPasswordController.clear();
+    resetPasswordEmailController.clear();
     signUpEmailController.clear();
     signUpPasswordController.clear();
     signUpConfirmPasswordController.clear();
@@ -130,6 +138,7 @@ class AuthPageController extends GetxController {
     pageController.dispose();
     loginEmailController.dispose();
     loginPasswordController.dispose();
+    resetPasswordEmailController.dispose();
     signUpEmailController.dispose();
     signUpPasswordController.dispose();
     signUpConfirmPasswordController.dispose();

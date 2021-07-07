@@ -93,6 +93,7 @@ class VvcDialog {
     TextStyle? confirmButtonTextStyle,
     TextStyle? cancelButtonTextStyle,
     required VoidCallback onConfirmPressed,
+    VoidCallback? onCancelPressed,
     bool onTouchToDismiss = true,
   }) async {
     showNormalDialog(
@@ -121,9 +122,11 @@ class VvcDialog {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    onPressed: () {
-                      Get.back();
-                    },
+                    onPressed: onCancelPressed == null
+                        ? () {
+                            Get.back();
+                          }
+                        : onCancelPressed,
                     child: Text(
                       cancelButtonText,
                       style: cancelButtonTextStyle,

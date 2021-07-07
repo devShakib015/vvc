@@ -4,9 +4,11 @@ import 'package:vvc/constants/color_constants.dart';
 
 class VvcSmallText extends StatelessWidget {
   final String text;
-  const VvcSmallText({
+  final TextDecoration? textDecoration;
+  VvcSmallText({
     Key? key,
     required this.text,
+    this.textDecoration,
   }) : super(key: key);
 
   @override
@@ -16,6 +18,7 @@ class VvcSmallText extends StatelessWidget {
       style: TextStyle(
         color: VvcColors.mainLightColor,
         fontSize: 12,
+        decoration: textDecoration,
       ),
     );
   }

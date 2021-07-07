@@ -110,21 +110,19 @@ class LoginPage extends StatelessWidget {
                               VvcSmallText(text: "Remember Me!"),
                             ],
                           ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              VvcSmallText(text: "Forgot Password? "),
-                              GestureDetector(
-                                onTap: () {
-                                  //todo: Reset Password
-                                },
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
-                                  child: VvcSmallText(text: "Reset Here!"),
-                                ),
-                              )
-                            ],
+                          GestureDetector(
+                            onTap: () {
+                              //todo: Reset Password
+
+                              print("forgot pass");
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              child: VvcSmallText(
+                                text: "Forgot Password?",
+                                textDecoration: TextDecoration.underline,
+                              ),
+                            ),
                           ),
                         ],
                       ),

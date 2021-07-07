@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/constants/image_constants.dart';
 import 'package:vvc/constants/style_constants.dart';
 import 'package:vvc/controllers/auth_controller/auth_page_controller.dart';
+import 'package:vvc/utils/privacy_policy.dart';
+import 'package:vvc/utils/terms_and_conditions.dart';
+import 'package:vvc/widgets/vvc_bottom_sheet.dart';
 import 'package:vvc/widgets/vvc_elevated_button.dart';
 import 'package:vvc/widgets/vvc_heading.dart';
 import 'package:vvc/widgets/vvc_small_text.dart';
@@ -174,15 +178,47 @@ class SignUpPage extends StatelessWidget {
           Row(
             children: [
               Checkbox(
-                value: _authPageController.isAcceptedPrivacyPolicy.value,
+                value: _authPageController.isAcceptedPrivacyAndTerms.value,
                 onChanged: (value) {
-                  _authPageController.isAcceptedPrivacyPolicy.value = value!;
+                  _authPageController.isAcceptedPrivacyAndTerms.value = value!;
                 },
               ),
               Flexible(
-                child: VvcSmallText(
-                  text:
-                      "By Selecting this checkbox you are agree with our privacy policy!",
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    VvcSmallText(
+                      text:
+                          "By Selecting this checkbox you are agree with our ",
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            VvcBottomSheet.showBottomSheet(
+                              child: Markdown(data: PrivacyPolicy.text),
+                            );
+                          },
+                          child: VvcSmallText(
+                            text: "privacy policy",
+                            textDecoration: TextDecoration.underline,
+                          ),
+                        ),
+                        VvcSmallText(text: " and "),
+                        GestureDetector(
+                          onTap: () {
+                            VvcBottomSheet.showBottomSheet(
+                              child: Markdown(data: TermsAndCondition.text),
+                            );
+                          },
+                          child: VvcSmallText(
+                            text: "terms and conditions!",
+                            textDecoration: TextDecoration.underline,
+                          ),
+                        )
+                      ],
+                    )
+                  ],
                 ),
               )
             ],

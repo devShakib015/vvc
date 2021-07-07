@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:vvc/controllers/auth_controller/auth_controller.dart';
 import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/views/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:vvc/widgets/vvc_dialog.dart';
 import 'package:vvc/widgets/vvc_snackbar.dart';
 
 class AuthPageController extends GetxController {
@@ -37,7 +38,7 @@ class AuthPageController extends GetxController {
   }
 
   //Privacy Policy
-  RxBool isAcceptedPrivacyPolicy = false.obs;
+  RxBool isAcceptedPrivacyAndTerms = false.obs;
 
   void onPressedLogin() async {
     //todo: Login
@@ -57,7 +58,7 @@ class AuthPageController extends GetxController {
     //todo: Sign Up
 
     if (signUpFormKey.currentState!.validate()) {
-      if (isAcceptedPrivacyPolicy.value) {
+      if (isAcceptedPrivacyAndTerms.value) {
         await _authController.signUp(
           signUpEmailController.text.trim(),
           signUpPasswordController.text.trim(),
@@ -66,9 +67,9 @@ class AuthPageController extends GetxController {
         Get.to(() => BottomNavBarPage());
       } else {
         VvcSnackBar.showSnackBar(
-            title: "Privacy Policy",
+            title: "Privacy, Terms and Condtions",
             message:
-                "Please read and accept our privacy policy and then try to sign up!");
+                "Please read and accept our privacy policy and terms to create an account!");
       }
     } else {
       VvcSnackBar.showErrorSnackBar(message: "Sign Up Error");
@@ -104,8 +105,17 @@ class AuthPageController extends GetxController {
   void onReady() {
     if (_storageController.savedEmail != null &&
         _storageController.savedPassword != null) {
-      loginEmailController.text = _storageController.savedEmail!;
-      loginPasswordController.text = _storageController.savedPassword!;
+      VvcDialog.showConfirmDialog(
+        title:
+            "Saved login info found for account with email -\n'${_storageController.savedEmail}' \nDo you want to login using this email?",
+        onConfirmPressed: () {
+          Get.back();
+          loginEmailController.text = _storageController.savedEmail!;
+          loginPasswordController.text = _storageController.savedPassword!;
+        },
+        cancelButtonText: "No",
+        confirmButtonText: "Yes",
+      );
     }
     super.onReady();
   }

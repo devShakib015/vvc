@@ -6,6 +6,7 @@ import 'package:vvc/constants/style_constants.dart';
 class VvcTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final Function(String)? onchanged;
+  final Function()? onTap;
   final String? Function(String?)? onValidate;
   final String label;
   final IconData? icon;
@@ -17,6 +18,7 @@ class VvcTextFormField extends StatelessWidget {
     Key? key,
     required this.controller,
     this.onchanged,
+    this.onTap,
     this.onValidate,
     required this.label,
     this.obscure = false,
@@ -32,6 +34,7 @@ class VvcTextFormField extends StatelessWidget {
       cursorColor: VvcColors.primaryColor2,
       onChanged: onchanged,
       validator: onValidate,
+      onTap: onTap,
       obscureText: obscure,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       keyboardType: textInputType,

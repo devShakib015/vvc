@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/constants/image_constants.dart';
 import 'package:vvc/constants/style_constants.dart';
-import 'package:vvc/controllers/auth_controller/auth_page_controller.dart';
+import 'package:vvc/controllers/auth_controller/auth_controller.dart';
 import 'package:vvc/widgets/vvc_bottom_sheet.dart';
 import 'package:vvc/widgets/vvc_elevated_button.dart';
 import 'package:vvc/widgets/vvc_heading.dart';
@@ -14,11 +14,11 @@ import 'package:vvc/widgets/vvc_text_form_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatelessWidget {
-  final AuthPageController _authPageController;
+  final AuthController _authController;
 
   LoginPage({
     required authPageController,
-  }) : this._authPageController = authPageController;
+  }) : this._authController = authPageController;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class LoginPage extends StatelessWidget {
   Center _loginFormSection() {
     return Center(
       child: Form(
-        key: _authPageController.loginFormKey,
+        key: _authController.loginFormKey,
         child: Padding(
           padding: VvcStyle.defaultSidePadding,
           child: Column(
@@ -63,7 +63,7 @@ class LoginPage extends StatelessWidget {
               VvcStyle.defaultVerticalSpacer,
               VvcElevatedButton.text(
                 label: "Login",
-                onPressed: _authPageController.onPressedLogin,
+                onPressed: _authController.onPressedLogin,
               ),
               VvcStyle.defaultVerticalSpacer,
 
@@ -75,11 +75,8 @@ class LoginPage extends StatelessWidget {
                 ],
               ),
 
-              Divider(
-                color: VvcColors.primaryColor2,
-                height: 2,
-                thickness: 1,
-              ),
+              VvcStyle.defaultDivider,
+
               VvcStyle.defaultVerticalSpacer,
               VvcSubHeading(text: "Or Continue With,"),
               VvcStyle.defaultVerticalSpacer,
@@ -94,18 +91,18 @@ class LoginPage extends StatelessWidget {
 
   Obx _passwordTextFieldSection() {
     return Obx(() => VvcTextFormField(
-          controller: _authPageController.loginPasswordController,
+          controller: _authController.loginPasswordController,
           textInputType: TextInputType.visiblePassword,
           label: "Password",
-          obscure: _authPageController.loginPasswordObscure.value,
+          obscure: _authController.loginPasswordObscure.value,
           icon: FontAwesomeIcons.keycdn,
           suffixIcon: IconButton(
             onPressed: () {
-              _authPageController.loginPasswordObscure.value =
-                  !_authPageController.loginPasswordObscure.value;
+              _authController.loginPasswordObscure.value =
+                  !_authController.loginPasswordObscure.value;
             },
             icon: Icon(
-              _authPageController.loginPasswordObscure.value
+              _authController.loginPasswordObscure.value
                   ? CupertinoIcons.eye_solid
                   : CupertinoIcons.eye_slash_fill,
               color: VvcColors.primaryColor2,
@@ -121,10 +118,11 @@ class LoginPage extends StatelessWidget {
 
   VvcTextFormField _emailTextFieldSection() {
     return VvcTextFormField(
-      controller: _authPageController.loginEmailController,
+      controller: _authController.loginEmailController,
       label: "Email",
       icon: CupertinoIcons.mail,
       textInputType: TextInputType.emailAddress,
+      onTap: _authController.loadSavedLoginInfo,
       onValidate: (text) {
         if (!GetUtils.isEmail(text!)) {
           return "Invalid Email!";
@@ -138,9 +136,9 @@ class LoginPage extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Obx(() => Checkbox(
-              value: _authPageController.getRememberMe,
+              value: _authController.getRememberMe,
               onChanged: (value) {
-                _authPageController.setRememberMe = value!;
+                _authController.setRememberMe = value!;
               },
             )),
         VvcSmallText(text: "Remember Me!"),
@@ -155,7 +153,7 @@ class LoginPage extends StatelessWidget {
         VvcSubHeading(text: "New User?"),
         VvcStyle.defaultHorizontalSpacer,
         GestureDetector(
-          onTap: _authPageController.goToSignUpPage,
+          onTap: _authController.goToSignUpPage,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: VvcSubHeading(
@@ -183,9 +181,7 @@ class LoginPage extends StatelessWidget {
           VvcElevatedButton.icon(
             tooltip: "Google Login",
             icon: Icon(FontAwesomeIcons.google),
-            onPressed: () {
-              //TODO: Login With Google
-            },
+            onPressed: _authController.loginUsingGoogle,
           ),
         ],
       ),
@@ -198,14 +194,14 @@ class LoginPage extends StatelessWidget {
         VvcBottomSheet.showBottomSheet(
           name: "Reset Password Bottom Sheet",
           child: Form(
-            key: _authPageController.resetPassFormKey,
+            key: _authController.resetPassFormKey,
             child: Column(
               children: [
                 VvcHeading(text: "Reset Password!"),
                 VvcStyle.defaultVerticalSpacer,
                 VvcStyle.defaultVerticalSpacer,
                 VvcTextFormField(
-                  controller: _authPageController.resetPasswordEmailController,
+                  controller: _authController.resetPasswordEmailController,
                   label: "Email Address",
                   icon: CupertinoIcons.mail,
                   textInputType: TextInputType.emailAddress,
@@ -219,7 +215,7 @@ class LoginPage extends StatelessWidget {
                 VvcStyle.defaultVerticalSpacer,
                 VvcElevatedButton.text(
                   label: "Send Reset Request",
-                  onPressed: _authPageController.onPressedResetPassword,
+                  onPressed: _authController.onPressedResetPassword,
                 ),
               ],
             ),

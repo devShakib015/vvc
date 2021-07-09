@@ -22,6 +22,11 @@ class VvcStyle {
   static final Widget defaultHorizontalSpacer = SizedBox(
     width: 15,
   );
+  static final Widget defaultDivider = Divider(
+    color: VvcColors.primaryColor2,
+    height: 2,
+    thickness: 1,
+  );
 
   static const TextStyle textStyle = TextStyle(
     color: Colors.white,

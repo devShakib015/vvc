@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "289587972288",
+    "project_id": "vvc-devshakib",
+    "storage_bucket": "vvc-devshakib.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:289587972288:android:24df5fd6c943c36460c525",
+        "android_client_info": {
+          "package_name": "devshakib.com.vvc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "289587972288-d4fr3bbar73u38n4nafq5mn91nhpgnlk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "devshakib.com.vvc",
+            "certificate_hash": "dfd454a1d014365243f3e351c9d9171c415dfcb8"
+          }
+        },
+        {
+          "client_id": "289587972288-t3nirgs8a5oi20lq5cdccfafk94ti8um.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPrWzCD9kJE02HeguPVal0Sy_8FJ0ksEw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "289587972288-t3nirgs8a5oi20lq5cdccfafk94ti8um.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/constants/image_constants.dart';
 import 'package:vvc/constants/style_constants.dart';
-import 'package:vvc/controllers/auth_controller/auth_page_controller.dart';
+import 'package:vvc/controllers/auth_controller/auth_controller.dart';
 import 'package:vvc/utils/privacy_policy.dart';
 import 'package:vvc/utils/terms_and_conditions.dart';
 import 'package:vvc/widgets/vvc_bottom_sheet.dart';
@@ -18,11 +18,11 @@ import 'package:vvc/widgets/vvc_text_form_field.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SignUpPage extends StatelessWidget {
-  final AuthPageController _authPageController;
+  final AuthController _authController;
 
   SignUpPage({
     required authPageController,
-  }) : this._authPageController = authPageController;
+  }) : this._authController = authPageController;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class SignUpPage extends StatelessWidget {
   Center _signUpFormSection() {
     return Center(
       child: Form(
-        key: _authPageController.signUpFormKey,
+        key: _authController.signUpFormKey,
         child: Padding(
           padding: VvcStyle.defaultSidePadding,
           child: Column(
@@ -72,7 +72,7 @@ class SignUpPage extends StatelessWidget {
 
               VvcElevatedButton.text(
                 label: "Sign Up",
-                onPressed: _authPageController.onPressedSignUp,
+                onPressed: _authController.onPressedSignUp,
               ),
 
               _loginSection(),
@@ -85,7 +85,7 @@ class SignUpPage extends StatelessWidget {
 
   VvcTextFormField _emailTextfieldSection() {
     return VvcTextFormField(
-      controller: _authPageController.signUpEmailController,
+      controller: _authController.signUpEmailController,
       label: "Email",
       icon: CupertinoIcons.mail,
       textInputType: TextInputType.emailAddress,
@@ -99,18 +99,18 @@ class SignUpPage extends StatelessWidget {
 
   Obx _passwordTextfieldSection() {
     return Obx(() => VvcTextFormField(
-          controller: _authPageController.signUpPasswordController,
+          controller: _authController.signUpPasswordController,
           textInputType: TextInputType.visiblePassword,
           label: "Password",
-          obscure: _authPageController.signUpPasswordObscure.value,
+          obscure: _authController.signUpPasswordObscure.value,
           icon: FontAwesomeIcons.keycdn,
           suffixIcon: IconButton(
             onPressed: () {
-              _authPageController.signUpPasswordObscure.value =
-                  !_authPageController.signUpPasswordObscure.value;
+              _authController.signUpPasswordObscure.value =
+                  !_authController.signUpPasswordObscure.value;
             },
             icon: Icon(
-              _authPageController.signUpPasswordObscure.value
+              _authController.signUpPasswordObscure.value
                   ? CupertinoIcons.eye_solid
                   : CupertinoIcons.eye_slash_fill,
               color: VvcColors.primaryColor2,
@@ -126,18 +126,18 @@ class SignUpPage extends StatelessWidget {
 
   Obx _confirmPassTextfieldSection() {
     return Obx(() => VvcTextFormField(
-          controller: _authPageController.signUpConfirmPasswordController,
+          controller: _authController.signUpConfirmPasswordController,
           textInputType: TextInputType.visiblePassword,
           label: "Confirm Password",
-          obscure: _authPageController.signUpConfirmPasswordObscure.value,
+          obscure: _authController.signUpConfirmPasswordObscure.value,
           icon: FontAwesomeIcons.keycdn,
           suffixIcon: IconButton(
             onPressed: () {
-              _authPageController.signUpConfirmPasswordObscure.value =
-                  !_authPageController.signUpConfirmPasswordObscure.value;
+              _authController.signUpConfirmPasswordObscure.value =
+                  !_authController.signUpConfirmPasswordObscure.value;
             },
             icon: Icon(
-              _authPageController.signUpConfirmPasswordObscure.value
+              _authController.signUpConfirmPasswordObscure.value
                   ? CupertinoIcons.eye_solid
                   : CupertinoIcons.eye_slash_fill,
               color: VvcColors.primaryColor2,
@@ -146,8 +146,7 @@ class SignUpPage extends StatelessWidget {
           onValidate: (text) {
             if (text!.length < 6) {
               return "Password Must Be At Least 6 Characters";
-            } else if (text !=
-                _authPageController.signUpPasswordController.text) {
+            } else if (text != _authController.signUpPasswordController.text) {
               return "Password didn't match";
             }
           },
@@ -160,7 +159,7 @@ class SignUpPage extends StatelessWidget {
       children: [
         VvcSubHeading(text: "Already A User? "),
         GestureDetector(
-          onTap: _authPageController.goToLoginPage,
+          onTap: _authController.goToLoginPage,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: VvcSubHeading(text: "Log In!"),
@@ -177,9 +176,9 @@ class SignUpPage extends StatelessWidget {
           Row(
             children: [
               Checkbox(
-                value: _authPageController.getRememberMe,
+                value: _authController.getRememberMe,
                 onChanged: (value) {
-                  _authPageController.setRememberMe = value!;
+                  _authController.setRememberMe = value!;
                 },
               ),
               VvcSmallText(text: "Remember Me!")
@@ -195,9 +194,9 @@ class SignUpPage extends StatelessWidget {
     return Row(
       children: [
         Checkbox(
-          value: _authPageController.isAcceptedPrivacyAndTerms.value,
+          value: _authController.isAcceptedPrivacyAndTerms.value,
           onChanged: (value) {
-            _authPageController.isAcceptedPrivacyAndTerms.value = value!;
+            _authController.isAcceptedPrivacyAndTerms.value = value!;
           },
         ),
         Flexible(

@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:vvc/constants/color_constants.dart';
+import 'package:vvc/controllers/contacts_controller/contacts_controller.dart';
+import 'package:vvc/controllers/home_controller/home_controller.dart';
+import 'package:vvc/controllers/profile_controller/profile_controller.dart';
 import 'package:vvc/views/Profile/profile_view.dart';
 import 'package:vvc/views/contacts/contact_view.dart';
 import 'package:vvc/views/home/home_view.dart';
@@ -23,6 +27,9 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
 
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut<HomeController>(() => HomeController());
+    Get.lazyPut<ContactsController>(() => ContactsController());
+    Get.lazyPut<ProfileController>(() => ProfileController());
     return Scaffold(
       backgroundColor: VvcColors.bgColor,
       body: _tabPages[_index],

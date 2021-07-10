@@ -12,7 +12,7 @@ class VvcHeading extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontSize: 28,
+        fontSize: 24,
         fontWeight: FontWeight.w500,
       ),
     );

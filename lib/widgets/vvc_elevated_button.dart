@@ -29,8 +29,8 @@ class VvcElevatedButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius)),
         gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
           colors: [VvcColors.primaryColor1, VvcColors.primaryColor2],
         ),
       ),

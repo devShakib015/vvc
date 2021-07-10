@@ -20,7 +20,9 @@ class ProfileView extends StatelessWidget {
             builder: (context) {
               return IconButton(
                 icon: Icon(Icons.settings_outlined),
-                onPressed: () => Get.to(() => SettingsPage()),
+                onPressed: () => Get.to(
+                  () => SettingsPage(),
+                ),
                 tooltip: "Settings",
               );
             },

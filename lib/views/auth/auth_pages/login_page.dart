@@ -48,11 +48,13 @@ class LoginPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               VvcStyle.defaultVerticalSpacer,
+              VvcStyle.defaultVerticalSpacer,
               //Logo
               Container(
                 width: VvcStyle.halfScreenWidth,
                 child: Image.asset(VvcImages.logo),
               ),
+              VvcStyle.defaultVerticalSpacer,
 
               VvcHeading(text: "Login"),
               VvcStyle.defaultVerticalSpacer,
@@ -105,7 +107,7 @@ class LoginPage extends StatelessWidget {
               _authController.loginPasswordObscure.value
                   ? CupertinoIcons.eye_solid
                   : CupertinoIcons.eye_slash_fill,
-              color: VvcColors.primaryColor2,
+              color: VvcColors.primaryColor1,
             ),
           ),
           onValidate: (text) {

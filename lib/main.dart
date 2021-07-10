@@ -30,7 +30,8 @@ class _AppState extends State<App> {
       title: 'VVC',
       debugShowCheckedModeBanner: false,
       theme: VvcStyle.vvcTheme(context),
-      defaultTransition: Transition.rightToLeftWithFade,
+      defaultTransition: Transition.cupertino,
+      transitionDuration: Duration(milliseconds: 500),
       home: FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
@@ -55,5 +56,6 @@ class VVC extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _storageController.isOnBoardingShown ? AuthView() : OnBoardingView();
+    //return ErrorPage();
   }
 }

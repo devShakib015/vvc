@@ -18,7 +18,7 @@ class VvcSubHeading extends StatelessWidget {
       textAlign: textAlign,
       style: TextStyle(
         color: VvcColors.mainLightColor,
-        fontSize: 14,
+        fontSize: 13,
       ),
     );
   }

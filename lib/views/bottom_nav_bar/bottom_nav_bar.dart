@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,10 +37,21 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
     //Bottom Nav bar
     return Scaffold(
       backgroundColor: VvcColors.bgColor,
-      body: _tabPages[_index],
+      body: PageTransitionSwitcher(
+        duration: Duration(milliseconds: 500),
+        transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>
+            FadeThroughTransition(
+          fillColor: Colors.transparent,
+          animation: primaryAnimation,
+          secondaryAnimation: secondaryAnimation,
+          child: child,
+        ),
+        child: _tabPages[_index],
+      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: GNav(
+          duration: Duration(milliseconds: 500),
           tabBorderRadius: 10,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           gap: 8,
@@ -52,8 +64,8 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
             });
           },
           tabBackgroundGradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
             colors: [VvcColors.primaryColor1, VvcColors.primaryColor2],
           ),
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

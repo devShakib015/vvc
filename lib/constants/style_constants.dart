@@ -23,19 +23,27 @@ class VvcStyle {
     width: 15,
   );
   static final Widget defaultDivider = Divider(
-    color: VvcColors.primaryColor2,
+    color: VvcColors.middleColor,
     height: 2,
     thickness: 1,
   );
 
-  static const TextStyle textStyle = TextStyle(
-    color: Colors.white,
-  );
+  static TextStyle textStyle(BuildContext context) => GoogleFonts.comfortaa(
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+        ),
+      );
 
   static ThemeData vvcTheme(BuildContext context) {
     return ThemeData.dark().copyWith(
       primaryColor: VvcColors.primaryColor2,
       accentColor: VvcColors.accentColor1,
+      checkboxTheme: CheckboxThemeData(
+        checkColor: MaterialStateProperty.all(VvcColors.bgColor),
+        fillColor: MaterialStateProperty.all(VvcColors.primaryColor1),
+      ),
       appBarTheme: AppBarTheme(
         backgroundColor: VvcColors.bgColor,
         elevation: 0,
@@ -49,7 +57,7 @@ class VvcStyle {
   static final inputDecoration = InputDecoration(
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: VvcColors.primaryColor2,
+        color: VvcColors.primaryColor1,
       ),
       borderRadius: BorderRadius.circular(10),
     ),
@@ -61,7 +69,7 @@ class VvcStyle {
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: VvcColors.primaryColor1,
+        color: VvcColors.middleColor,
       ),
       borderRadius: BorderRadius.circular(10),
     ),
@@ -73,7 +81,7 @@ class VvcStyle {
     ),
     border: OutlineInputBorder(
       borderSide: BorderSide(
-        color: VvcColors.primaryColor2,
+        color: VvcColors.primaryColor1,
       ),
       borderRadius: BorderRadius.circular(10),
     ),
@@ -84,16 +92,16 @@ TextTheme _vvcTextTheme(BuildContext context) {
   return GoogleFonts.comfortaaTextTheme(
     Theme.of(context).textTheme,
   ).copyWith(
-    headline1: VvcStyle.textStyle,
-    headline2: VvcStyle.textStyle,
-    bodyText1: VvcStyle.textStyle,
-    bodyText2: VvcStyle.textStyle,
-    caption: VvcStyle.textStyle,
-    headline3: VvcStyle.textStyle,
-    headline4: VvcStyle.textStyle,
-    headline5: VvcStyle.textStyle,
-    headline6: VvcStyle.textStyle,
-    subtitle1: VvcStyle.textStyle,
-    subtitle2: VvcStyle.textStyle,
+    headline1: VvcStyle.textStyle(context),
+    headline2: VvcStyle.textStyle(context),
+    bodyText1: VvcStyle.textStyle(context),
+    bodyText2: VvcStyle.textStyle(context),
+    caption: VvcStyle.textStyle(context),
+    headline3: VvcStyle.textStyle(context),
+    headline4: VvcStyle.textStyle(context),
+    headline5: VvcStyle.textStyle(context),
+    headline6: VvcStyle.textStyle(context),
+    subtitle1: VvcStyle.textStyle(context),
+    subtitle2: VvcStyle.textStyle(context),
   );
 }

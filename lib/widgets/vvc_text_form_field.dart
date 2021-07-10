@@ -41,14 +41,14 @@ class VvcTextFormField extends StatelessWidget {
       decoration: VvcStyle.inputDecoration.copyWith(
         labelText: label,
         labelStyle: TextStyle(
-          color: VvcColors.primaryColor2,
+          color: VvcColors.primaryColor1,
         ),
         suffixIcon: suffixIcon == null ? null : suffixIcon,
         prefixIcon: icon == null
             ? null
             : Icon(
                 icon,
-                color: VvcColors.primaryColor2,
+                color: VvcColors.primaryColor1,
               ),
       ),
     );

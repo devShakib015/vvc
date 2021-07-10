@@ -17,7 +17,7 @@ class VvcSmallText extends StatelessWidget {
       text,
       style: TextStyle(
         color: VvcColors.mainLightColor,
-        fontSize: 12,
+        fontSize: 11,
         decoration: textDecoration,
       ),
     );

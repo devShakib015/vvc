@@ -5,6 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:vvc/constants/firebase_constants.dart';
+import 'package:vvc/controllers/contacts_controller/contacts_controller.dart';
+import 'package:vvc/controllers/home_controller/home_controller.dart';
+import 'package:vvc/controllers/profile_controller/profile_controller.dart';
 
 import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/models/user_model.dart';
@@ -26,8 +29,8 @@ class AuthController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
     _currentUser.bindStream(FirebaseConstants.auth.userChanges());
+    super.onInit();
   }
 
   //Login Using Email and Password
@@ -185,6 +188,10 @@ class AuthController extends GetxController {
   //!Log Out
   Future<void> logOut() async {
     try {
+      await Future.delayed(Duration(seconds: 2));
+      await Get.delete<HomeController>();
+      await Get.delete<ContactsController>();
+      await Get.delete<ProfileController>();
       await FirebaseConstants.auth.signOut();
     } catch (e) {
       VvcSnackBar.showErrorSnackBar(

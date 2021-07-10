@@ -27,9 +27,13 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut<HomeController>(() => HomeController());
-    Get.lazyPut<ContactsController>(() => ContactsController());
-    Get.lazyPut<ProfileController>(() => ProfileController());
+    //Put All the controllers
+
+    Get.put(HomeController());
+    Get.put(ContactsController());
+    Get.put(ProfileController());
+
+    //Bottom Nav bar
     return Scaffold(
       backgroundColor: VvcColors.bgColor,
       body: _tabPages[_index],

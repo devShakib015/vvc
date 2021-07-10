@@ -9,6 +9,4 @@ class FirebaseConstants {
 
   static CollectionReference<Map<String, dynamic>> userCollection =
       firestore.collection('users');
-
-  static User currentUser = auth.currentUser!;
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:vvc/constants/color_constants.dart';
 
 class VvcCard extends StatelessWidget {
@@ -16,7 +15,7 @@ class VvcCard extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        margin: EdgeInsets.all(4),
+        margin: EdgeInsets.symmetric(vertical: 4),
         decoration: ShapeDecoration(
           shadows: [],
           shape:
@@ -24,11 +23,28 @@ class VvcCard extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
-            colors: [VvcColors.primaryColor1, VvcColors.primaryColor2],
+            colors: [VvcColors.accentColor1, VvcColors.accentColor2],
           ),
         ),
         child: child,
       ),
+    );
+  }
+}
+
+class VvcMenuTitleCard extends StatelessWidget {
+  final Widget child;
+
+  const VvcMenuTitleCard({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: child,
     );
   }
 }

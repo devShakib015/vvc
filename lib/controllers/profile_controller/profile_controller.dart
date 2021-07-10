@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:package_info/package_info.dart';
 import 'package:vvc/constants/firebase_constants.dart';
 import 'package:vvc/controllers/auth_controller/auth_controller.dart';
 import 'package:vvc/models/user_model.dart';
@@ -22,6 +23,12 @@ class ProfileController extends GetxController {
   final TextEditingController passwordTextEditingController =
       TextEditingController();
 
+  //Package Info
+  late String appName;
+  late String packageName;
+  late String version;
+  late String buildNumber;
+
   //Reactive User Mode
   Rx<UserModel> _user = UserModel(
     id: Get.find<AuthController>().getCurrentUser!.uid,
@@ -40,7 +47,18 @@ class ProfileController extends GetxController {
         return UserModel.fromMap(event.data()!);
       }),
     );
+
+    getPackageInfo();
     super.onInit();
+  }
+
+  void getPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    appName = packageInfo.appName;
+    packageName = packageInfo.packageName;
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
   }
 
   void updateUserName({required String name}) async {
@@ -117,6 +135,7 @@ class ProfileController extends GetxController {
 
       VvcSnackBar.showSnackBar(
           title: "Verification!",
+          durationInSecond: 4,
           message:
               "A verification link is sent to your email. Click the link and verify it!\nLog out and login again to see the effect!");
     } catch (e) {
@@ -128,6 +147,7 @@ class ProfileController extends GetxController {
     try {
       VvcDialog.showLoading();
       await _authController.getCurrentUser!.updatePassword(pass);
+
       VvcDialog.hideLoading();
       clearFields();
       VvcSnackBar.showSnackBar(

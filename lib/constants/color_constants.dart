@@ -14,7 +14,7 @@ class VvcColors {
   static const Color fadeLightColor = Color(0xFF8C9AAF);
   static const Color mainLightColor = Color(0xFFD6DBE4);
 
-  static const Color bgColor = Color(0xff000000);
+  static const Color bgColor = Color(0xFF000000);
 
   static const Color errorColor = Color(0xFF830000);
 }

@@ -28,7 +28,7 @@ class VvcSnackBar {
               ],
             ),
       backgroundColor:
-          isErrorBar ? VvcColors.errorColor.withOpacity(0.6) : null,
+          isErrorBar ? VvcColors.errorColor.withOpacity(0.9) : null,
       borderRadius: 10,
       margin: EdgeInsets.all(16),
       snackStyle: SnackStyle.FLOATING,

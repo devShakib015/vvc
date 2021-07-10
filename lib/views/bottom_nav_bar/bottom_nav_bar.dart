@@ -36,7 +36,6 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
 
     //Bottom Nav bar
     return Scaffold(
-      backgroundColor: VvcColors.bgColor,
       body: PageTransitionSwitcher(
         duration: Duration(milliseconds: 500),
         transitionBuilder: (child, primaryAnimation, secondaryAnimation) =>

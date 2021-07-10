@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/constants/style_constants.dart';
 import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/utils/error_page.dart';
@@ -29,7 +30,16 @@ class _AppState extends State<App> {
     return GetMaterialApp(
       title: 'VVC',
       debugShowCheckedModeBanner: false,
-      theme: VvcStyle.vvcTheme(context),
+      theme: VvcStyle.buildTheme.copyWith(
+        appBarTheme: AppBarTheme(
+          backgroundColor: VvcColors.bgColor,
+          elevation: 0,
+          centerTitle: true,
+          textTheme: VvcStyle.vvcTextTheme(context),
+        ),
+        textTheme: VvcStyle.vvcTextTheme(context),
+        accentColor: VvcColors.bgColor,
+      ),
       defaultTransition: Transition.cupertino,
       transitionDuration: Duration(milliseconds: 500),
       home: FutureBuilder(
@@ -38,12 +48,10 @@ class _AppState extends State<App> {
           if (snapshot.hasError) {
             return ErrorPage();
           }
-
           if (snapshot.connectionState == ConnectionState.done) {
             return VVC();
-          }
-
-          return LoadingPage();
+          } else
+            return LoadingPage();
         },
       ),
     );

@@ -82,6 +82,8 @@ class AuthController extends GetxController {
               name: null,
               profilePicUrl: null,
             ).toMap());
+
+        await Future.delayed(Duration(seconds: 1));
       });
 
       if (remeberLoginInfo.value) {
@@ -121,14 +123,14 @@ class AuthController extends GetxController {
             await _googleUser.authentication;
 
         // Create a new credential
-        final credential = GoogleAuthProvider.credential(
+        final _credential = GoogleAuthProvider.credential(
           accessToken: _googleAuth.accessToken,
           idToken: _googleAuth.idToken,
         );
 
         try {
-          await FirebaseAuth.instance
-              .signInWithCredential(credential)
+          await FirebaseConstants.auth
+              .signInWithCredential(_credential)
               .then((userCredential) {
             FirebaseConstants.userCollection.get().then((querySnapshot) async {
               final List<QueryDocumentSnapshot<Map<String, dynamic>>>
@@ -147,6 +149,8 @@ class AuthController extends GetxController {
                       name: userCredential.user!.displayName,
                       profilePicUrl: userCredential.user!.photoURL,
                     ).toMap());
+
+                await Future.delayed(Duration(seconds: 1));
               }
             });
           });
@@ -170,25 +174,35 @@ class AuthController extends GetxController {
   //Reset Password using email
   //!Reset password
   Future<void> resetPassword(String email) async {
-    //TODO:Reset password
-
+    Get.back();
     try {
       VvcDialog.showLoading();
-      await Future.delayed(Duration(seconds: 3));
+      await FirebaseConstants.auth.sendPasswordResetEmail(email: email);
+
       clearFields();
       VvcDialog.hideLoading();
+      VvcSnackBar.showSnackBar(
+        title: "Request Sent!",
+        message:
+            "A password reset email is sent to your mail. Check and reset your password!",
+      );
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      if (e.code == "user-not-found") {
+        VvcDialog.hideLoading();
+        VvcSnackBar.showErrorSnackBar(message: "User Not Found!");
+      }
     } catch (e) {
+      VvcDialog.hideLoading();
       VvcSnackBar.showErrorSnackBar(message: "Send Request Error!");
     }
-
-    print("Done!");
   }
 
   //Log out from firebase auth
   //!Log Out
   Future<void> logOut() async {
     try {
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(seconds: 1));
       await Get.delete<HomeController>();
       await Get.delete<ContactsController>();
       await Get.delete<ProfileController>();
@@ -263,8 +277,6 @@ class AuthController extends GetxController {
   void onPressedResetPassword() async {
     if (resetPassFormKey.currentState!.validate()) {
       await resetPassword(resetPasswordEmailController.text.trim());
-
-      Get.back();
     }
   }
 

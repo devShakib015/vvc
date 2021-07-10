@@ -36,23 +36,32 @@ class VvcStyle {
         ),
       );
 
-  static ThemeData vvcTheme(BuildContext context) {
-    return ThemeData.dark().copyWith(
-      primaryColor: VvcColors.primaryColor2,
-      accentColor: VvcColors.accentColor1,
-      checkboxTheme: CheckboxThemeData(
-        checkColor: MaterialStateProperty.all(VvcColors.bgColor),
-        fillColor: MaterialStateProperty.all(VvcColors.primaryColor1),
-      ),
-      appBarTheme: AppBarTheme(
-        backgroundColor: VvcColors.bgColor,
-        elevation: 0,
-        centerTitle: true,
-        textTheme: _vvcTextTheme(context),
-      ),
-      textTheme: _vvcTextTheme(context),
-    );
-  }
+  static ThemeData buildTheme = ThemeData.dark().copyWith(
+    primaryColor: VvcColors.primaryColor1,
+    colorScheme: ColorScheme.dark().copyWith(
+      secondary: VvcColors.accentColor1,
+    ),
+    primaryColorDark: VvcColors.primaryColor1,
+    accentColorBrightness: Brightness.dark,
+    accentColor: VvcColors.primaryColor1,
+    backgroundColor: VvcColors.bgColor,
+    scaffoldBackgroundColor: VvcColors.bgColor,
+    bottomAppBarColor: VvcColors.bgColor,
+    cardColor: VvcColors.bgColor,
+    checkboxTheme: CheckboxThemeData(
+      checkColor: MaterialStateProperty.all(VvcColors.bgColor),
+      fillColor: MaterialStateProperty.all(VvcColors.primaryColor1),
+    ),
+    textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+            foregroundColor:
+                MaterialStateProperty.all(VvcColors.mainLightColor))),
+    dialogBackgroundColor: VvcColors.bgColor,
+    dialogTheme: DialogTheme(
+        shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    )),
+  );
 
   static final inputDecoration = InputDecoration(
     enabledBorder: OutlineInputBorder(
@@ -86,22 +95,22 @@ class VvcStyle {
       borderRadius: BorderRadius.circular(10),
     ),
   );
-}
 
-TextTheme _vvcTextTheme(BuildContext context) {
-  return GoogleFonts.comfortaaTextTheme(
-    Theme.of(context).textTheme,
-  ).copyWith(
-    headline1: VvcStyle.textStyle(context),
-    headline2: VvcStyle.textStyle(context),
-    bodyText1: VvcStyle.textStyle(context),
-    bodyText2: VvcStyle.textStyle(context),
-    caption: VvcStyle.textStyle(context),
-    headline3: VvcStyle.textStyle(context),
-    headline4: VvcStyle.textStyle(context),
-    headline5: VvcStyle.textStyle(context),
-    headline6: VvcStyle.textStyle(context),
-    subtitle1: VvcStyle.textStyle(context),
-    subtitle2: VvcStyle.textStyle(context),
-  );
+  static TextTheme vvcTextTheme(BuildContext context) {
+    return GoogleFonts.comfortaaTextTheme(
+      Theme.of(context).textTheme,
+    ).copyWith(
+      headline1: VvcStyle.textStyle(context),
+      headline2: VvcStyle.textStyle(context),
+      bodyText1: VvcStyle.textStyle(context),
+      bodyText2: VvcStyle.textStyle(context),
+      caption: VvcStyle.textStyle(context),
+      headline3: VvcStyle.textStyle(context),
+      headline4: VvcStyle.textStyle(context),
+      headline5: VvcStyle.textStyle(context),
+      headline6: VvcStyle.textStyle(context),
+      subtitle1: VvcStyle.textStyle(context),
+      subtitle2: VvcStyle.textStyle(context),
+    );
+  }
 }

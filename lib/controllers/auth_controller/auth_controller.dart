@@ -8,7 +8,6 @@ import 'package:vvc/constants/firebase_constants.dart';
 import 'package:vvc/controllers/contacts_controller/contacts_controller.dart';
 import 'package:vvc/controllers/home_controller/home_controller.dart';
 import 'package:vvc/controllers/profile_controller/profile_controller.dart';
-
 import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/models/user_model.dart';
 import 'package:vvc/widgets/vvc_dialog.dart';
@@ -201,13 +200,20 @@ class AuthController extends GetxController {
   //Log out from firebase auth
   //!Log Out
   Future<void> logOut() async {
+    Get.back();
+
     try {
-      await Future.delayed(Duration(seconds: 1));
-      await Get.delete<HomeController>();
-      await Get.delete<ContactsController>();
-      await Get.delete<ProfileController>();
-      await FirebaseConstants.auth.signOut();
+      Get.back();
+      VvcDialog.showLoading();
+      await Future.delayed(Duration(seconds: 2));
+      await FirebaseConstants.auth.signOut().then((value) async {
+        await Get.delete<HomeController>();
+        await Get.delete<ContactsController>();
+        await Get.delete<ProfileController>();
+      });
+      VvcDialog.hideLoading();
     } catch (e) {
+      VvcDialog.hideLoading();
       VvcSnackBar.showErrorSnackBar(
           message: "There is an error to log you out!");
     }

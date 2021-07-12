@@ -1,11 +1,17 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:package_info/package_info.dart';
 import 'package:vvc/constants/firebase_constants.dart';
 import 'package:vvc/controllers/auth_controller/auth_controller.dart';
 import 'package:vvc/models/user_model.dart';
 import 'package:vvc/widgets/vvc_dialog.dart';
 import 'package:vvc/widgets/vvc_snackbar.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileController extends GetxController {
   final AuthController _authController = Get.find<AuthController>();
@@ -20,8 +26,17 @@ class ProfileController extends GetxController {
       TextEditingController();
   final TextEditingController emailTextEditingController =
       TextEditingController();
-  final TextEditingController passwordTextEditingController =
+  final TextEditingController currentPasswordTextEditingController =
       TextEditingController();
+  final TextEditingController newPasswordTextEditingController =
+      TextEditingController();
+  final TextEditingController newConfirmPasswordTextEditingController =
+      TextEditingController();
+
+  //Obscure Fields
+  RxBool currentPasswordObscure = true.obs;
+  RxBool newPasswordObscure = true.obs;
+  RxBool confirmPasswordObscure = true.obs;
 
   //Package Info
   late String appName;
@@ -83,52 +98,107 @@ class ProfileController extends GetxController {
     }
   }
 
-  void updateUserProfilePic({required String profilePicUrl}) async {
+  //Updated Profile Picture
+  void updateUserProfilePic() async {
     try {
       VvcDialog.showLoading();
-      await _authController.getCurrentUser!.updatePhotoURL(profilePicUrl);
 
-      await FirebaseConstants.userCollection.doc(_user.value.id).update(
-            UserModel(
-              id: _user.value.id,
-              email: _user.value.email,
-              name: _user.value.name,
-              profilePicUrl: profilePicUrl,
-            ).toMap(),
-          );
-      VvcDialog.hideLoading();
+      // ignore: invalid_use_of_visible_for_testing_member
+      await ImagePicker.platform
+          .pickImage(source: ImageSource.gallery)
+          .then((image) async {
+        Reference storageReference = FirebaseConstants.storage
+            .ref()
+            .child(_user.value.id)
+            .child("Profile Picture")
+            .child("avatar");
 
-      VvcSnackBar.showSnackBar(
-          title: "Success!",
-          message: "Profile Picture is successfully updated!");
+        UploadTask uploadTask = storageReference.putFile(File(image!.path));
+        await uploadTask.whenComplete(() {
+          storageReference.getDownloadURL().then((fileURL) async {
+            await _authController.getCurrentUser!.updatePhotoURL(fileURL);
+
+            await FirebaseConstants.userCollection.doc(_user.value.id).update(
+                  UserModel(
+                    id: _user.value.id,
+                    email: _user.value.email,
+                    name: _user.value.name,
+                    profilePicUrl: fileURL,
+                  ).toMap(),
+                );
+
+            VvcDialog.hideLoading();
+
+            VvcSnackBar.showSnackBar(
+                title: "Success!",
+                message: "Profile Picture is successfully updated!");
+          });
+        });
+      });
     } catch (e) {
       VvcDialog.hideLoading();
       VvcSnackBar.showErrorSnackBar(message: "Something went wrong!");
     }
   }
 
-  void updateUserEmail({required String email}) async {
+  //Change User Email
+  void updateUserEmail() async {
+    VvcDialog.showLoading();
+    AuthCredential _authCredential = EmailAuthProvider.credential(
+        email: user.email,
+        password: currentPasswordTextEditingController.text.trim());
+
     try {
-      VvcDialog.showLoading();
-      await _authController.getCurrentUser!.updateEmail(email);
-      await FirebaseConstants.userCollection.doc(_user.value.id).update(
-            UserModel(
-              id: _user.value.id,
-              email: email,
-              name: _user.value.name,
-              profilePicUrl: _user.value.profilePicUrl,
-            ).toMap(),
-          );
+      await _authController.getCurrentUser!
+          .reauthenticateWithCredential(_authCredential)
+          .then((value) async {
+        try {
+          await _authController.getCurrentUser!
+              .updateEmail(emailTextEditingController.text.trim());
+          await FirebaseConstants.userCollection.doc(_user.value.id).update(
+                UserModel(
+                  id: _user.value.id,
+                  email: emailTextEditingController.text.trim(),
+                  name: _user.value.name,
+                  profilePicUrl: _user.value.profilePicUrl,
+                ).toMap(),
+              );
+
+          VvcDialog.hideLoading();
+          clearFields();
+
+          VvcSnackBar.showSnackBar(
+              title: "Success!",
+              message: "Email is successfully chnaged to new one!");
+        } on FirebaseAuthException catch (e) {
+          VvcDialog.hideLoading();
+          if (e.code == "email-already-in-use") {
+            VvcSnackBar.showErrorSnackBar(
+              message:
+                  "Email is already in use. Please try again with different email!",
+              durationInSecond: 3,
+            );
+          }
+        }
+      });
+    } on FirebaseAuthException catch (e) {
       VvcDialog.hideLoading();
-      clearFields();
-      VvcSnackBar.showSnackBar(
-          title: "Success!", message: "Email is successfully updated!");
-    } catch (e) {
-      VvcDialog.hideLoading();
-      VvcSnackBar.showErrorSnackBar(message: "Something went wrong!");
+      if (e.code == "wrong-password") {
+        VvcSnackBar.showErrorSnackBar(
+          message: "Your current password is not what we have in our system!",
+          durationInSecond: 2,
+        );
+      } else {
+        VvcSnackBar.showErrorSnackBar(
+          message:
+              "Don't cross your limit to do such tasks again! We have blocked you for a while. Try again later!",
+          durationInSecond: 3,
+        );
+      }
     }
   }
 
+  //Verify User Email
   void verifyUserEmail() async {
     try {
       await _authController.getCurrentUser!.sendEmailVerification();
@@ -143,33 +213,59 @@ class ProfileController extends GetxController {
     }
   }
 
-  void updateUserPassword({required String pass}) async {
-    try {
-      VvcDialog.showLoading();
-      await _authController.getCurrentUser!.updatePassword(pass);
+  //Change Password
+  void updateUserPassword() async {
+    VvcDialog.showLoading();
+    AuthCredential _authCredential = EmailAuthProvider.credential(
+        email: user.email,
+        password: currentPasswordTextEditingController.text.trim());
 
+    try {
+      await _authController.getCurrentUser!
+          .reauthenticateWithCredential(_authCredential)
+          .then((value) async {
+        await _authController.getCurrentUser!.updatePassword(
+            newConfirmPasswordTextEditingController.text.trim());
+
+        VvcDialog.hideLoading();
+        clearFields();
+
+        VvcSnackBar.showSnackBar(
+            title: "Success!",
+            message: "Password is successfully chnaged to new one!");
+      });
+    } on FirebaseAuthException catch (e) {
       VvcDialog.hideLoading();
-      clearFields();
-      VvcSnackBar.showSnackBar(
-          title: "Success!",
-          message: "Password is successfully chnaged to new one!");
-    } catch (e) {
-      VvcDialog.hideLoading();
-      VvcSnackBar.showErrorSnackBar(message: "Something went wrong!");
+      if (e.code == "wrong-password") {
+        VvcSnackBar.showErrorSnackBar(
+          message: "Your current password is not what we have in our system!",
+          durationInSecond: 2,
+        );
+      } else {
+        VvcSnackBar.showErrorSnackBar(
+          message:
+              "Don't cross your limit to do such tasks again! We have blocked you for a while. Try again later!",
+          durationInSecond: 3,
+        );
+      }
     }
   }
 
   void clearFields() {
     nameTextEditingController.clear();
     emailTextEditingController.clear();
-    passwordTextEditingController.clear();
+    currentPasswordTextEditingController.clear();
+    newPasswordTextEditingController.clear();
+    newConfirmPasswordTextEditingController.clear();
   }
 
   @override
   void dispose() {
     nameTextEditingController.dispose();
     emailTextEditingController.dispose();
-    passwordTextEditingController.dispose();
+    newPasswordTextEditingController.dispose();
+    currentPasswordTextEditingController.dispose();
+    newConfirmPasswordTextEditingController.dispose();
     super.dispose();
   }
 }

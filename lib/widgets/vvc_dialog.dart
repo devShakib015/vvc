@@ -72,7 +72,7 @@ class VvcDialog {
             Padding(
               padding: const EdgeInsets.only(top: 25),
               child: Text(
-                message ?? "Loading...",
+                message ?? "loading".tr,
                 textAlign: TextAlign.center,
               ),
             ),

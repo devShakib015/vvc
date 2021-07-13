@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/views/profile/components/profile_body.dart';
-import 'package:vvc/views/profile/components/settings.dart';
+import 'package:vvc/views/settings/settings.dart';
 import 'package:vvc/widgets/vvc_app_bar_title.dart';
 
 class ProfileView extends StatelessWidget {
@@ -14,7 +14,7 @@ class ProfileView extends StatelessWidget {
     return Scaffold(
       backgroundColor: VvcColors.bgColor,
       appBar: AppBar(
-        title: VvcAppBarTitle(text: "Profile"),
+        title: VvcAppBarTitle(text: "profile".tr),
         actions: [
           Builder(
             builder: (context) {
@@ -23,7 +23,7 @@ class ProfileView extends StatelessWidget {
                 onPressed: () => Get.to(
                   () => SettingsPage(),
                 ),
-                tooltip: "Settings",
+                tooltip: "settings".tr,
               );
             },
           ),

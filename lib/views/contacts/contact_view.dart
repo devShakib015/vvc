@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vvc/widgets/vvc_app_bar_title.dart';
+import 'package:get/get.dart';
 
 class ContactView extends StatelessWidget {
   const ContactView({Key? key}) : super(key: key);
@@ -8,7 +9,7 @@ class ContactView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: VvcAppBarTitle(text: "Contacts"),
+        title: VvcAppBarTitle(text: "contacts".tr),
       ),
       body: Container(
         child: Center(

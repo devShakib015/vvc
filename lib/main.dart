@@ -8,6 +8,7 @@ import 'package:vvc/constants/style_constants.dart';
 import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/utils/error_page.dart';
 import 'package:vvc/utils/loading_page.dart';
+import 'package:vvc/utils/vvc_multi_language.dart';
 import 'package:vvc/views/auth/auth_view.dart';
 import 'package:vvc/views/onboarding/onboarding_view.dart';
 
@@ -24,6 +25,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  final StorageController _storageController = Get.put(StorageController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,8 @@ class _AppState extends State<App> {
       ),
       defaultTransition: Transition.cupertino,
       transitionDuration: Duration(milliseconds: 500),
+      translations: VvcMultiLanguage(),
+      locale: vvcLanguages[_storageController.langIndex].locale,
       home: FutureBuilder(
         future: _initialization,
         builder: (context, snapshot) {
@@ -59,7 +63,7 @@ class _AppState extends State<App> {
 }
 
 class VVC extends StatelessWidget {
-  final StorageController _storageController = Get.put(StorageController());
+  final StorageController _storageController = Get.find<StorageController>();
 
   @override
   Widget build(BuildContext context) {

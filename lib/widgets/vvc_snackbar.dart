@@ -36,10 +36,10 @@ class VvcSnackBar {
   }
 
   static void showErrorSnackBar(
-      {required String message, int durationInSecond = 1}) {
+      {required String message, int durationInSecond = 2}) {
     showSnackBar(
       durationInSecond: durationInSecond,
-      title: "Error!",
+      title: "error_title".tr,
       message: message,
       isErrorBar: true,
     );

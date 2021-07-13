@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:package_info/package_info.dart';
 import 'package:vvc/constants/firebase_constants.dart';
 import 'package:vvc/controllers/auth_controller/auth_controller.dart';
+import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/models/user_model.dart';
 import 'package:vvc/models/user_name_model.dart';
 import 'package:vvc/widgets/vvc_dialog.dart';
@@ -42,6 +43,9 @@ class SettingsController extends GetxController {
   RxBool newPasswordObscure = true.obs;
   RxBool confirmPasswordObscure = true.obs;
 
+  //Language Index
+  RxInt currentLangIndex = 0.obs;
+
   //Package Info
   String appName = "";
   String packageName = "";
@@ -69,6 +73,7 @@ class SettingsController extends GetxController {
     );
 
     getPackageInfo();
+    currentLangIndex.value = Get.find<StorageController>().langIndex;
     super.onInit();
   }
 
@@ -79,6 +84,10 @@ class SettingsController extends GetxController {
     packageName = packageInfo.packageName;
     version = packageInfo.version;
     buildNumber = packageInfo.buildNumber;
+  }
+
+  void updateLanguageIndexStorage(int index) {
+    Get.find<StorageController>().updateLanguageIndex(index);
   }
 
   void updateUserDefaultName({required String name}) async {
@@ -100,7 +109,7 @@ class SettingsController extends GetxController {
           title: "Success!", message: "Name is successfully updated!");
     } catch (e) {
       VvcDialog.hideLoading();
-      VvcSnackBar.showErrorSnackBar(message: "Something went wrong!");
+      VvcSnackBar.showErrorSnackBar(message: "error".tr);
     }
   }
 
@@ -144,7 +153,7 @@ class SettingsController extends GetxController {
       });
     } catch (e) {
       VvcDialog.hideLoading();
-      VvcSnackBar.showErrorSnackBar(message: "Something went wrong!");
+      VvcSnackBar.showErrorSnackBar(message: "error".tr);
     }
   }
 
@@ -275,7 +284,7 @@ class SettingsController extends GetxController {
           message:
               "A verification link is sent to your email. Click the link and verify it!\nLog out and login again to see the effect!");
     } catch (e) {
-      VvcSnackBar.showErrorSnackBar(message: "Something went wrong!");
+      VvcSnackBar.showErrorSnackBar(message: "error".tr);
     }
   }
 

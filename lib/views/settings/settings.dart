@@ -9,11 +9,11 @@ import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/constants/image_constants.dart';
 import 'package:vvc/constants/style_constants.dart';
 import 'package:vvc/controllers/auth_controller/auth_controller.dart';
-import 'package:vvc/controllers/profile_controller/profile_controller.dart';
 import 'package:vvc/controllers/settings_controller/settings_controller.dart';
 import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/utils/privacy_policy.dart';
 import 'package:vvc/utils/terms_and_conditions.dart';
+import 'package:vvc/utils/vvc_multi_language.dart';
 import 'package:vvc/widgets/vvc_app_bar_title.dart';
 import 'package:vvc/widgets/vvc_bottom_sheet.dart';
 import 'package:vvc/widgets/vvc_card.dart';
@@ -34,7 +34,7 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: VvcAppBarTitle(text: "Settings"),
+        title: VvcAppBarTitle(text: "settings".tr),
         actions: [
           IconButton(
             onPressed: () {
@@ -65,6 +65,8 @@ class SettingsPage extends StatelessWidget {
 
               VvcMenuTitleCard(child: VvcSubHeading(text: "My Account")),
 
+              //!Name Card
+
               VvcCard(
                 onPressed: () {
                   VvcBottomSheet.showBottomSheet(
@@ -73,11 +75,22 @@ class SettingsPage extends StatelessWidget {
                 },
                 child: Obx(() => ListTile(
                       title: Text("Name"),
-                      subtitle: VvcSmallText(text: "Tap to change your name."),
-                      trailing: VvcSmallText(
-                          text: _settingsController.user.name ?? "No name"),
+                      subtitle: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: VvcSmallText(text: "Tap to change name."),
+                          ),
+                          VvcStyle.defaultHorizontalSpacer,
+                          VvcSmallText(
+                              text: _settingsController.user.name ?? "No name")
+                        ],
+                      ),
                     )),
               ),
+
+              //!Profile Picture Card
 
               VvcCard(
                 onPressed: _settingsController.updateUserProfilePic,
@@ -100,18 +113,29 @@ class SettingsPage extends StatelessWidget {
                     )),
               ),
 
+              //!Email Card
+
               VvcCard(
                 onPressed: () {
                   VvcBottomSheet.showBottomSheet(child: _changeEmailForm());
                 },
                 child: Obx(() => ListTile(
                       title: Text("Email"),
-                      subtitle: VvcSmallText(
-                          text: "Tap to change your email address."),
-                      trailing:
+                      subtitle: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: VvcSmallText(text: "Tap to change email."),
+                          ),
+                          VvcStyle.defaultHorizontalSpacer,
                           VvcSmallText(text: _settingsController.user.email),
+                        ],
+                      ),
                     )),
               ),
+
+              //!User Name Card
 
               VvcCard(
                 onLongPressed: () async {
@@ -127,11 +151,20 @@ class SettingsPage extends StatelessWidget {
                 },
                 child: Obx(() => ListTile(
                       title: Text("User Name"),
-                      subtitle: VvcSmallText(text: "Long press to copy."),
-                      trailing:
+                      subtitle: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                              child: VvcSmallText(text: "Long press to copy.")),
+                          VvcStyle.defaultHorizontalSpacer,
                           VvcSmallText(text: _settingsController.user.userName),
+                        ],
+                      ),
                     )),
               ),
+
+              //!Created BY Card
 
               for (var i = 0;
                   i < _authController.getCurrentUser!.providerData.length;
@@ -148,6 +181,8 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
 
+              //!Created AT Card
+
               VvcCard(
                 child: ListTile(
                   title: Text("Created at"),
@@ -158,6 +193,8 @@ class SettingsPage extends StatelessWidget {
                           .substring(0, 19)),
                 ),
               ),
+
+              //!Last Logged In Card
 
               VvcCard(
                 child: ListTile(
@@ -173,6 +210,8 @@ class SettingsPage extends StatelessWidget {
               //!Account Actions
 
               VvcMenuTitleCard(child: VvcSubHeading(text: "Account Actions")),
+
+              //!Account Verification Card
 
               _authController.getCurrentUser != null
                   ? Obx(() => VvcCard(
@@ -206,6 +245,8 @@ class SettingsPage extends StatelessWidget {
                       ))
                   : Container(),
 
+              //!Change Password Card
+
               for (var i = 0;
                   i < _authController.getCurrentUser!.providerData.length;
                   i++)
@@ -222,6 +263,9 @@ class SettingsPage extends StatelessWidget {
                         ),
                       )
                     : Container(),
+
+              //!Share Account Card
+
               VvcCard(
                 onPressed: () async {
                   await Share.share(
@@ -232,6 +276,12 @@ class SettingsPage extends StatelessWidget {
                   trailing: Icon(CupertinoIcons.share_up),
                 ),
               ),
+
+              //!App Actions
+
+              VvcMenuTitleCard(child: VvcSubHeading(text: "App Actions")),
+
+              //!Onboarding Card
 
               Obx(() => VvcCard(
                     onPressed: () {
@@ -249,9 +299,53 @@ class SettingsPage extends StatelessWidget {
                           ),
                   )),
 
+              //!Language Card
+
+              VvcCard(
+                onPressed: () {
+                  VvcBottomSheet.showBottomSheet(
+                      child: Container(
+                    child: Column(
+                      children: [
+                        VvcSubHeading(text: "Select Language!"),
+                        Expanded(
+                          child: ListView(
+                            children: vvcLanguages.map((language) {
+                              return Obx(() => ListTile(
+                                    title: Text(language.name),
+                                    trailing: Checkbox(
+                                      onChanged: (value) {
+                                        _settingsController
+                                                .currentLangIndex.value =
+                                            vvcLanguages.indexOf(language);
+                                        Get.updateLocale(language.locale);
+                                        _settingsController
+                                            .updateLanguageIndexStorage(
+                                                vvcLanguages.indexOf(language));
+                                      },
+                                      value: _settingsController
+                                              .currentLangIndex.value ==
+                                          vvcLanguages.indexOf(language),
+                                    ),
+                                  ));
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ));
+                },
+                child: ListTile(
+                  title: Text("Change Language"),
+                  trailing: Icon(Icons.translate_rounded),
+                ),
+              ),
+
               //!About App
 
               VvcMenuTitleCard(child: VvcSubHeading(text: "About App")),
+
+              //!About card
 
               VvcCard(
                 onPressed: () {
@@ -266,6 +360,9 @@ class SettingsPage extends StatelessWidget {
                   trailing: Icon(Icons.business),
                 ),
               ),
+
+              //!Privacy Policy Card
+
               VvcCard(
                 onPressed: () {
                   VvcBottomSheet.showBottomSheet(
@@ -278,6 +375,9 @@ class SettingsPage extends StatelessWidget {
                   trailing: Icon(Icons.security),
                 ),
               ),
+
+              //!Terms And Condition Card
+
               VvcCard(
                 onPressed: () {
                   VvcBottomSheet.showBottomSheet(

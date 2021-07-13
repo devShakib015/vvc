@@ -60,7 +60,7 @@ class SignUpPage extends StatelessWidget {
               ),
               VvcStyle.defaultVerticalSpacer,
 
-              VvcHeading(text: "Sign Up"),
+              VvcHeading(text: "signUp".tr),
               VvcStyle.defaultVerticalSpacer,
               _emailTextfieldSection(),
               VvcStyle.defaultVerticalSpacer,
@@ -75,7 +75,7 @@ class SignUpPage extends StatelessWidget {
               VvcStyle.defaultVerticalSpacer,
 
               VvcElevatedButton.text(
-                label: "Sign Up",
+                label: "signUp".tr,
                 onPressed: _authController.onPressedSignUp,
               ),
 
@@ -90,12 +90,12 @@ class SignUpPage extends StatelessWidget {
   VvcTextFormField _emailTextfieldSection() {
     return VvcTextFormField(
       controller: _authController.signUpEmailController,
-      label: "Email",
+      label: "signUp_email".tr,
       icon: CupertinoIcons.mail,
       textInputType: TextInputType.emailAddress,
       onValidate: (text) {
         if (!GetUtils.isEmail(text!)) {
-          return "Invalid Email!";
+          return "signUp_email_error".tr;
         }
       },
     );
@@ -104,12 +104,12 @@ class SignUpPage extends StatelessWidget {
   VvcTextFormField _userNameTextfieldSection() {
     return VvcTextFormField(
       controller: _authController.signUpUserNameController,
-      label: "User Name",
+      label: "signUp_username".tr,
       icon: Icons.perm_identity,
       textInputType: TextInputType.emailAddress,
       onValidate: (text) {
         if (text!.length < 5) {
-          return "Username must be at least 5 characters long!";
+          return "signUp_username_error".tr;
         }
       },
     );
@@ -119,7 +119,7 @@ class SignUpPage extends StatelessWidget {
     return Obx(() => VvcTextFormField(
           controller: _authController.signUpPasswordController,
           textInputType: TextInputType.visiblePassword,
-          label: "Password",
+          label: "signUp_password".tr,
           obscure: _authController.signUpPasswordObscure.value,
           icon: FontAwesomeIcons.keycdn,
           suffixIcon: IconButton(
@@ -136,7 +136,7 @@ class SignUpPage extends StatelessWidget {
           ),
           onValidate: (text) {
             if (text!.length < 6) {
-              return "Password Must Be At Least 6 Characters";
+              return "signUp_password_error".tr;
             }
           },
         ));
@@ -146,7 +146,7 @@ class SignUpPage extends StatelessWidget {
     return Obx(() => VvcTextFormField(
           controller: _authController.signUpConfirmPasswordController,
           textInputType: TextInputType.visiblePassword,
-          label: "Confirm Password",
+          label: "signUp_confirm_password".tr,
           obscure: _authController.signUpConfirmPasswordObscure.value,
           icon: FontAwesomeIcons.keycdn,
           suffixIcon: IconButton(
@@ -163,9 +163,9 @@ class SignUpPage extends StatelessWidget {
           ),
           onValidate: (text) {
             if (text!.length < 6) {
-              return "Password Must Be At Least 6 Characters";
+              return "signUp_password_error".tr;
             } else if (text != _authController.signUpPasswordController.text) {
-              return "Password didn't match";
+              return "signUp_password_dont_match".tr;
             }
           },
         ));
@@ -175,12 +175,12 @@ class SignUpPage extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        VvcSubHeading(text: "Already A User? "),
+        VvcSubHeading(text: "signUp_already_user".tr),
         GestureDetector(
           onTap: _authController.goToLoginPage,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
-            child: VvcSubHeading(text: "Log In!"),
+            child: VvcSubHeading(text: "signUp_go_to_login".tr),
           ),
         )
       ],
@@ -199,7 +199,7 @@ class SignUpPage extends StatelessWidget {
                   _authController.setRememberMe = value!;
                 },
               ),
-              VvcSmallText(text: "Remember Me!")
+              VvcSmallText(text: "signUp_remember".tr)
             ],
           ),
           _privacyAndTermsSection()
@@ -222,7 +222,7 @@ class SignUpPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               VvcSmallText(
-                text: "By Selecting this checkbox you are agree with our ",
+                text: "privacy_terms_sentence".tr,
               ),
               Row(
                 children: [
@@ -234,11 +234,11 @@ class SignUpPage extends StatelessWidget {
                       );
                     },
                     child: VvcSmallText(
-                      text: "privacy policy",
+                      text: "privacy_policy".tr,
                       textDecoration: TextDecoration.underline,
                     ),
                   ),
-                  VvcSmallText(text: " and "),
+                  VvcSmallText(text: "and".tr),
                   GestureDetector(
                     onTap: () {
                       VvcBottomSheet.showBottomSheet(
@@ -247,7 +247,7 @@ class SignUpPage extends StatelessWidget {
                       );
                     },
                     child: VvcSmallText(
-                      text: "terms and conditions!",
+                      text: "terms_and_conditions".tr,
                       textDecoration: TextDecoration.underline,
                     ),
                   )

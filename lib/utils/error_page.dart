@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/constants/image_constants.dart';
 import 'package:vvc/constants/style_constants.dart';
@@ -22,17 +23,16 @@ class ErrorPage extends StatelessWidget {
             children: [
               Image.asset(VvcImages.error),
               VvcStyle.defaultVerticalSpacer,
-              VvcHeading(text: "Something Went Wrong!"),
+              VvcHeading(text: "error".tr),
               VvcStyle.defaultVerticalSpacer,
               VvcSubHeading(
-                text:
-                    "There might be issues about internet connection or the page is not available. Please be patient and try again. If the app doesn't work as expected, check your internet connection and relaunch the app. Thank you!",
+                text: "error_message".tr,
                 textAlign: TextAlign.center,
               ),
               VvcStyle.defaultVerticalSpacer,
               VvcStyle.defaultVerticalSpacer,
               VvcElevatedButton.icon(
-                tooltip: "Reload",
+                tooltip: "reload".tr,
                 icon: Icon(CupertinoIcons.refresh_bold),
                 onPressed: () {
                   //TODO:Retry Implementation

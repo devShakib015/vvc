@@ -56,7 +56,7 @@ class LoginPage extends StatelessWidget {
               ),
               VvcStyle.defaultVerticalSpacer,
 
-              VvcHeading(text: "Login"),
+              VvcHeading(text: "login".tr),
               VvcStyle.defaultVerticalSpacer,
               _emailTextFieldSection(),
               VvcStyle.defaultVerticalSpacer,
@@ -64,7 +64,7 @@ class LoginPage extends StatelessWidget {
               VvcStyle.defaultVerticalSpacer,
               VvcStyle.defaultVerticalSpacer,
               VvcElevatedButton.text(
-                label: "Login",
+                label: "login".tr,
                 onPressed: _authController.onPressedLogin,
               ),
               VvcStyle.defaultVerticalSpacer,
@@ -80,7 +80,7 @@ class LoginPage extends StatelessWidget {
               VvcStyle.defaultDivider,
 
               VvcStyle.defaultVerticalSpacer,
-              VvcSubHeading(text: "Or Continue With,"),
+              VvcSubHeading(text: "login_continue_with".tr),
               VvcStyle.defaultVerticalSpacer,
               _socialLoginSection(),
               _signUpSection(),
@@ -95,7 +95,7 @@ class LoginPage extends StatelessWidget {
     return Obx(() => VvcTextFormField(
           controller: _authController.loginPasswordController,
           textInputType: TextInputType.visiblePassword,
-          label: "Password",
+          label: "login_password".tr,
           obscure: _authController.loginPasswordObscure.value,
           icon: FontAwesomeIcons.keycdn,
           suffixIcon: IconButton(
@@ -112,7 +112,7 @@ class LoginPage extends StatelessWidget {
           ),
           onValidate: (text) {
             if (text!.length < 6) {
-              return "Password Must Be At Least 6 Characters";
+              return "login_password_error".tr;
             }
           },
         ));
@@ -121,13 +121,13 @@ class LoginPage extends StatelessWidget {
   VvcTextFormField _emailTextFieldSection() {
     return VvcTextFormField(
       controller: _authController.loginEmailController,
-      label: "Email",
+      label: "login_email".tr,
       icon: CupertinoIcons.mail,
       textInputType: TextInputType.emailAddress,
       onTap: _authController.loadSavedLoginInfo,
       onValidate: (text) {
         if (!GetUtils.isEmail(text!)) {
-          return "Invalid Email!";
+          return "login_email_error".tr;
         }
       },
     );
@@ -143,7 +143,7 @@ class LoginPage extends StatelessWidget {
                 _authController.setRememberMe = value!;
               },
             )),
-        VvcSmallText(text: "Remember Me!"),
+        VvcSmallText(text: "login_remember".tr),
       ],
     );
   }
@@ -152,14 +152,14 @@ class LoginPage extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        VvcSubHeading(text: "New User?"),
+        VvcSubHeading(text: "login_new_user".tr),
         VvcStyle.defaultHorizontalSpacer,
         GestureDetector(
           onTap: _authController.goToSignUpPage,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: VvcSubHeading(
-              text: "Sign Up using Email!",
+              text: "login_go_to_sign_up".tr,
             ),
           ),
         )
@@ -173,7 +173,7 @@ class LoginPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           VvcElevatedButton.icon(
-            tooltip: "Facebook Login",
+            tooltip: "login_facebook".tr,
             icon: Icon(FontAwesomeIcons.facebookF),
             onPressed: () {
               //TODO: Login With facebook
@@ -181,7 +181,7 @@ class LoginPage extends StatelessWidget {
           ),
           VvcStyle.defaultHorizontalSpacer,
           VvcElevatedButton.icon(
-            tooltip: "Google Login",
+            tooltip: "login_google".tr,
             icon: Icon(FontAwesomeIcons.google),
             onPressed: _authController.loginUsingGoogle,
           ),
@@ -197,29 +197,31 @@ class LoginPage extends StatelessWidget {
           name: "Reset Password Bottom Sheet",
           child: Form(
             key: _authController.resetPassFormKey,
-            child: Column(
-              children: [
-                VvcHeading(text: "Reset Password!"),
-                VvcStyle.defaultVerticalSpacer,
-                VvcStyle.defaultVerticalSpacer,
-                VvcTextFormField(
-                  controller: _authController.resetPasswordEmailController,
-                  label: "Email Address",
-                  icon: CupertinoIcons.mail,
-                  textInputType: TextInputType.emailAddress,
-                  onValidate: (text) {
-                    if (!GetUtils.isEmail(text!)) {
-                      return "Invalid Email!";
-                    }
-                  },
-                ),
-                VvcStyle.defaultVerticalSpacer,
-                VvcStyle.defaultVerticalSpacer,
-                VvcElevatedButton.text(
-                  label: "Send Reset Request",
-                  onPressed: _authController.onPressedResetPassword,
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  VvcSubHeading(text: "reset_password".tr),
+                  VvcStyle.defaultVerticalSpacer,
+                  VvcStyle.defaultVerticalSpacer,
+                  VvcTextFormField(
+                    controller: _authController.resetPasswordEmailController,
+                    label: "login_email".tr,
+                    icon: CupertinoIcons.mail,
+                    textInputType: TextInputType.emailAddress,
+                    onValidate: (text) {
+                      if (!GetUtils.isEmail(text!)) {
+                        return "login_email_error".tr;
+                      }
+                    },
+                  ),
+                  VvcStyle.defaultVerticalSpacer,
+                  VvcStyle.defaultVerticalSpacer,
+                  VvcElevatedButton.text(
+                    label: "reset_password_send".tr,
+                    onPressed: _authController.onPressedResetPassword,
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -227,7 +229,7 @@ class LoginPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: VvcSmallText(
-          text: "Forgot Password?",
+          text: "login_forgot_password".tr,
           textDecoration: TextDecoration.underline,
         ),
       ),

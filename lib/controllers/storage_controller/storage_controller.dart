@@ -5,6 +5,7 @@ class StorageController extends GetxController {
   final _box = GetStorage();
   final String _onBoardingStorageKey = "isOnBoardingShown";
   final String _saveLoginInfoKey = "loginInfo";
+  final String _languageIndexStorageKey = "languageIndex";
 
   //onBoarding Storage
   late bool _onBoardingValue;
@@ -35,6 +36,13 @@ class StorageController extends GetxController {
     }
   }
 
+  //Language Storage
+  int langIndex = 0;
+
+  void updateLanguageIndex(int index) async {
+    await _box.write(_languageIndexStorageKey, index);
+  }
+
   @override
   void onInit() {
     _onBoardingValue = _box.read(_onBoardingStorageKey) ?? false;
@@ -58,6 +66,12 @@ class StorageController extends GetxController {
         _savedEmail = value["email"];
         _savedPasword = value["pass"];
       }
+    });
+
+    langIndex = _box.read(_languageIndexStorageKey) ?? 0;
+
+    _box.listenKey(_languageIndexStorageKey, (index) {
+      langIndex = index;
     });
 
     super.onInit();

@@ -73,15 +73,15 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
           tabs: [
             GButton(
               icon: CupertinoIcons.home,
-              text: 'Home',
+              text: 'home'.tr,
             ),
             GButton(
               icon: CupertinoIcons.person_2,
-              text: 'Contacts',
+              text: 'contacts'.tr,
             ),
             GButton(
               icon: CupertinoIcons.person,
-              text: 'Profile',
+              text: 'profile'.tr,
             )
           ],
         ),

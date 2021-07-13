@@ -55,15 +55,14 @@ class AuthController extends GetxController {
       print(e);
       VvcDialog.hideLoading();
       if (e.code == 'user-not-found') {
-        VvcSnackBar.showErrorSnackBar(message: 'No user found for that email.');
+        VvcSnackBar.showErrorSnackBar(message: 'login_no_user_found'.tr);
       } else if (e.code == 'wrong-password') {
-        VvcSnackBar.showErrorSnackBar(
-            message: 'Wrong password provided for that user.');
+        VvcSnackBar.showErrorSnackBar(message: 'login_wrong_password'.tr);
       }
     } catch (e) {
       VvcDialog.hideLoading();
       print(e);
-      VvcSnackBar.showErrorSnackBar(message: 'Someting went wrong!');
+      VvcSnackBar.showErrorSnackBar(message: "error".tr);
     }
   }
 
@@ -75,7 +74,7 @@ class AuthController extends GetxController {
       bool _isAlreadyUser = await doesUserNameExists(userName);
       if (_isAlreadyUser) {
         VvcDialog.hideLoading();
-        VvcSnackBar.showErrorSnackBar(message: 'User name already exists.');
+        VvcSnackBar.showErrorSnackBar(message: "signUp_username_exists".tr);
       } else {
         await FirebaseConstants.auth
             .createUserWithEmailAndPassword(email: email, password: pass)
@@ -110,17 +109,13 @@ class AuthController extends GetxController {
     } on FirebaseAuthException catch (e) {
       print(e);
       VvcDialog.hideLoading();
-      if (e.code == 'weak-password') {
-        VvcSnackBar.showErrorSnackBar(
-            message: 'The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        VvcSnackBar.showErrorSnackBar(
-            message: 'The account already exists for that email.');
+      if (e.code == 'email-already-in-use') {
+        VvcSnackBar.showErrorSnackBar(message: "signUp_user_exists".tr);
       }
     } catch (e) {
       VvcDialog.hideLoading();
       print(e);
-      VvcSnackBar.showErrorSnackBar(message: 'Someting went wrong!');
+      VvcSnackBar.showErrorSnackBar(message: "error".tr);
     }
   }
 
@@ -184,12 +179,12 @@ class AuthController extends GetxController {
         }
       } else {
         VvcDialog.hideLoading();
-        VvcSnackBar.showErrorSnackBar(message: 'Someting went wrong!');
+        VvcSnackBar.showErrorSnackBar(message: 'error'.tr);
       }
     } catch (e) {
       VvcDialog.hideLoading();
       print(e);
-      VvcSnackBar.showErrorSnackBar(message: 'Someting went wrong!');
+      VvcSnackBar.showErrorSnackBar(message: 'error'.tr);
     }
   }
 
@@ -204,19 +199,19 @@ class AuthController extends GetxController {
       clearFields();
       VvcDialog.hideLoading();
       VvcSnackBar.showSnackBar(
-        title: "Request Sent!",
-        message:
-            "A password reset email is sent to your mail. Check and reset your password!",
+        title: "reset_password_request_sent".tr,
+        message: "reset_password_message".tr,
       );
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == "user-not-found") {
         VvcDialog.hideLoading();
-        VvcSnackBar.showErrorSnackBar(message: "User Not Found!");
+        VvcSnackBar.showErrorSnackBar(
+            message: "reset_password_user_not_found".tr);
       }
     } catch (e) {
       VvcDialog.hideLoading();
-      VvcSnackBar.showErrorSnackBar(message: "Send Request Error!");
+      VvcSnackBar.showErrorSnackBar(message: "error".tr);
     }
   }
 
@@ -238,8 +233,7 @@ class AuthController extends GetxController {
       VvcDialog.hideLoading();
     } catch (e) {
       VvcDialog.hideLoading();
-      VvcSnackBar.showErrorSnackBar(
-          message: "There is an error to log you out!");
+      VvcSnackBar.showErrorSnackBar(message: "error".tr);
     }
   }
 
@@ -308,9 +302,8 @@ class AuthController extends GetxController {
         );
       } else {
         VvcSnackBar.showSnackBar(
-          title: "Privacy, Terms and Condtions",
-          message:
-              "Please read and accept our privacy policy and terms to create an account!",
+          title: "privacy_terms_title".tr,
+          message: "privacy_terms_message".tr,
         );
       }
     }

@@ -8,8 +8,10 @@ import 'package:vvc/constants/firebase_constants.dart';
 import 'package:vvc/controllers/contacts_controller/contacts_controller.dart';
 import 'package:vvc/controllers/home_controller/home_controller.dart';
 import 'package:vvc/controllers/profile_controller/profile_controller.dart';
+import 'package:vvc/controllers/settings_controller/settings_controller.dart';
 import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/models/user_model.dart';
+import 'package:vvc/models/user_name_model.dart';
 import 'package:vvc/widgets/vvc_dialog.dart';
 import 'package:vvc/widgets/vvc_snackbar.dart';
 
@@ -67,31 +69,44 @@ class AuthController extends GetxController {
 
   //Sign up using email and password
   //!Sign Up
-  Future<void> signUp(String email, String pass) async {
+  Future<void> signUp(String userName, String email, String pass) async {
     try {
       VvcDialog.showLoading();
-      await FirebaseConstants.auth
-          .createUserWithEmailAndPassword(email: email, password: pass)
-          .then((value) async {
-        await FirebaseConstants.userCollection
-            .doc(value.user!.uid)
-            .set(UserModel(
-              id: value.user!.uid,
-              email: email,
-              name: null,
-              profilePicUrl: null,
-            ).toMap());
-
-        await Future.delayed(Duration(seconds: 1));
-      });
-
-      if (remeberLoginInfo.value) {
-        _storageController.updateSavedEmailAndPassword(email, pass);
+      bool _isAlreadyUser = await doesUserNameExists(userName);
+      if (_isAlreadyUser) {
+        VvcDialog.hideLoading();
+        VvcSnackBar.showErrorSnackBar(message: 'User name already exists.');
       } else {
-        _storageController.updateSavedEmailAndPassword(null, null);
+        await FirebaseConstants.auth
+            .createUserWithEmailAndPassword(email: email, password: pass)
+            .then((value) async {
+          //Save to users
+          await FirebaseConstants.userCollection
+              .doc(value.user!.uid)
+              .set(UserModel(
+                id: value.user!.uid,
+                userName: userName,
+                email: email,
+                name: null,
+                profilePicUrl: null,
+              ).toMap());
+
+          //Save To UserName
+          await FirebaseConstants.userNameCollection
+              .doc(value.user!.uid)
+              .set(UserName(userName: userName).toMap());
+
+          await Future.delayed(Duration(seconds: 1));
+        });
+
+        if (remeberLoginInfo.value) {
+          _storageController.updateSavedEmailAndPassword(email, pass);
+        } else {
+          _storageController.updateSavedEmailAndPassword(null, null);
+        }
+        clearFields();
+        VvcDialog.hideLoading();
       }
-      clearFields();
-      VvcDialog.hideLoading();
     } on FirebaseAuthException catch (e) {
       print(e);
       VvcDialog.hideLoading();
@@ -140,14 +155,22 @@ class AuthController extends GetxController {
               });
 
               if (!_userUidList.contains(userCredential.user!.uid)) {
+                //Save to Users
                 await FirebaseConstants.userCollection
                     .doc(userCredential.user!.uid)
                     .set(UserModel(
                       id: userCredential.user!.uid,
+                      userName: userCredential.user!.email!,
                       email: userCredential.user!.email!,
                       name: userCredential.user!.displayName,
                       profilePicUrl: userCredential.user!.photoURL,
                     ).toMap());
+
+                //Save To UserName
+                await FirebaseConstants.userNameCollection
+                    .doc(userCredential.user!.uid)
+                    .set(UserName(userName: userCredential.user!.email!)
+                        .toMap());
 
                 await Future.delayed(Duration(seconds: 1));
               }
@@ -210,6 +233,7 @@ class AuthController extends GetxController {
         await Get.delete<HomeController>();
         await Get.delete<ContactsController>();
         await Get.delete<ProfileController>();
+        await Get.delete<SettingsController>();
       });
       VvcDialog.hideLoading();
     } catch (e) {
@@ -217,6 +241,16 @@ class AuthController extends GetxController {
       VvcSnackBar.showErrorSnackBar(
           message: "There is an error to log you out!");
     }
+  }
+
+  //User Name Check
+  Future<bool> doesUserNameExists(String userName) async {
+    return await FirebaseConstants.userNameCollection
+        .where("userName", isEqualTo: userName)
+        .get()
+        .then((value) {
+      return value.docs.isEmpty ? false : true;
+    });
   }
 
   //For Auth pages
@@ -234,6 +268,7 @@ class AuthController extends GetxController {
   TextEditingController resetPasswordEmailController = TextEditingController();
 
   //Sign Up Text Editing Controller
+  TextEditingController signUpUserNameController = TextEditingController();
   TextEditingController signUpEmailController = TextEditingController();
   TextEditingController signUpPasswordController = TextEditingController();
   TextEditingController signUpConfirmPasswordController =
@@ -267,6 +302,7 @@ class AuthController extends GetxController {
     if (signUpFormKey.currentState!.validate()) {
       if (isAcceptedPrivacyAndTerms.value) {
         await signUp(
+          signUpUserNameController.text.trim(),
           signUpEmailController.text.trim(),
           signUpPasswordController.text.trim(),
         );
@@ -325,6 +361,7 @@ class AuthController extends GetxController {
     loginPasswordController.clear();
     resetPasswordEmailController.clear();
     signUpEmailController.clear();
+    signUpUserNameController.clear();
     signUpPasswordController.clear();
     signUpConfirmPasswordController.clear();
   }
@@ -336,6 +373,7 @@ class AuthController extends GetxController {
     loginPasswordController.dispose();
     resetPasswordEmailController.dispose();
     signUpEmailController.dispose();
+    signUpUserNameController.dispose();
     signUpPasswordController.dispose();
     signUpConfirmPasswordController.dispose();
     super.dispose();

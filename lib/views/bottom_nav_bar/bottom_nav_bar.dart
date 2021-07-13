@@ -7,6 +7,7 @@ import 'package:vvc/constants/color_constants.dart';
 import 'package:vvc/controllers/contacts_controller/contacts_controller.dart';
 import 'package:vvc/controllers/home_controller/home_controller.dart';
 import 'package:vvc/controllers/profile_controller/profile_controller.dart';
+import 'package:vvc/controllers/settings_controller/settings_controller.dart';
 import 'package:vvc/views/Profile/profile_view.dart';
 import 'package:vvc/views/contacts/contact_view.dart';
 import 'package:vvc/views/home/home_view.dart';
@@ -33,6 +34,7 @@ class _BottomNavBarPageState extends State<BottomNavBarPage> {
     Get.put(HomeController());
     Get.put(ContactsController());
     Get.put(ProfileController());
+    Get.put(SettingsController());
 
     //Bottom Nav bar
     return Scaffold(

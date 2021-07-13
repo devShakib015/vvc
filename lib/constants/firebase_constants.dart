@@ -12,4 +12,6 @@ class FirebaseConstants {
 
   static CollectionReference<Map<String, dynamic>> userCollection =
       firestore.collection('users');
+  static CollectionReference<Map<String, dynamic>> userNameCollection =
+      firestore.collection('userNames');
 }

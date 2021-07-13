@@ -10,6 +10,7 @@ import 'package:vvc/constants/image_constants.dart';
 import 'package:vvc/constants/style_constants.dart';
 import 'package:vvc/controllers/auth_controller/auth_controller.dart';
 import 'package:vvc/controllers/profile_controller/profile_controller.dart';
+import 'package:vvc/controllers/settings_controller/settings_controller.dart';
 import 'package:vvc/controllers/storage_controller/storage_controller.dart';
 import 'package:vvc/utils/privacy_policy.dart';
 import 'package:vvc/utils/terms_and_conditions.dart';
@@ -26,7 +27,7 @@ import 'package:vvc/widgets/vvc_text_form_field.dart';
 class SettingsPage extends StatelessWidget {
   SettingsPage({Key? key}) : super(key: key);
 
-  final ProfileController _profileController = Get.find<ProfileController>();
+  final SettingsController _settingsController = Get.find<SettingsController>();
   final AuthController _authController = Get.find<AuthController>();
 
   @override
@@ -39,13 +40,13 @@ class SettingsPage extends StatelessWidget {
             onPressed: () {
               showAboutDialog(
                 context: context,
-                applicationName: _profileController.appName,
+                applicationName: _settingsController.appName,
                 applicationIcon: Container(
                     width: 100,
                     height: 100,
                     child: Image.asset(VvcImages.logo)),
                 applicationLegalese: "devShakib",
-                applicationVersion: _profileController.version,
+                applicationVersion: _settingsController.version,
               );
             },
             icon: Icon(CupertinoIcons.info_circle),
@@ -64,18 +65,30 @@ class SettingsPage extends StatelessWidget {
 
               VvcMenuTitleCard(child: VvcSubHeading(text: "My Account")),
 
-              _nameSection(),
+              VvcCard(
+                onPressed: () {
+                  VvcBottomSheet.showBottomSheet(
+                    child: _changeNameForm(),
+                  );
+                },
+                child: Obx(() => ListTile(
+                      title: Text("Name"),
+                      subtitle: VvcSmallText(text: "Tap to change your name."),
+                      trailing: VvcSmallText(
+                          text: _settingsController.user.name ?? "No name"),
+                    )),
+              ),
 
-              Obx(() => VvcCard(
-                    onPressed: _profileController.updateUserProfilePic,
-                    child: ListTile(
+              VvcCard(
+                onPressed: _settingsController.updateUserProfilePic,
+                child: Obx(() => ListTile(
                       title: Text("Profile Picture"),
                       subtitle: VvcSmallText(
                           text: "Tap to upload a new profile picture."),
-                      trailing: _profileController.user.profilePicUrl != null
+                      trailing: _settingsController.user.profilePicUrl != null
                           ? CircleAvatar(
                               backgroundImage: NetworkImage(
-                                  _profileController.user.profilePicUrl!),
+                                  _settingsController.user.profilePicUrl!),
                             )
                           : CircleAvatar(
                               backgroundColor: VvcColors.mainLightColor,
@@ -84,36 +97,40 @@ class SettingsPage extends StatelessWidget {
                                 color: VvcColors.bgColor,
                               ),
                             ),
-                    ),
-                  )),
+                    )),
+              ),
 
-              Obx(() => VvcCard(
-                    onPressed: () {
-                      VvcBottomSheet.showBottomSheet(child: _changeEmailForm());
-                    },
-                    child: ListTile(
+              VvcCard(
+                onPressed: () {
+                  VvcBottomSheet.showBottomSheet(child: _changeEmailForm());
+                },
+                child: Obx(() => ListTile(
                       title: Text("Email"),
                       subtitle: VvcSmallText(
                           text: "Tap to change your email address."),
                       trailing:
-                          VvcSmallText(text: _profileController.user.email),
-                    ),
-                  )),
+                          VvcSmallText(text: _settingsController.user.email),
+                    )),
+              ),
 
               VvcCard(
                 onLongPressed: () async {
                   await Clipboard.setData(
-                    ClipboardData(text: _profileController.user.id),
+                    ClipboardData(text: _settingsController.user.id),
                   );
                   VvcSnackBar.showSnackBar(
                       title: "Clipboard",
                       message: "ID is copied to clipboard!");
                 },
-                child: ListTile(
-                  title: Text("Unique ID"),
-                  subtitle: VvcSmallText(text: "Long press to copy."),
-                  trailing: VvcSmallText(text: _profileController.user.id),
-                ),
+                onPressed: () {
+                  VvcBottomSheet.showBottomSheet(child: _changeUserNameForm());
+                },
+                child: Obx(() => ListTile(
+                      title: Text("User Name"),
+                      subtitle: VvcSmallText(text: "Long press to copy."),
+                      trailing:
+                          VvcSmallText(text: _settingsController.user.userName),
+                    )),
               ),
 
               for (var i = 0;
@@ -161,7 +178,7 @@ class SettingsPage extends StatelessWidget {
                   ? Obx(() => VvcCard(
                         onPressed: () {
                           if (!_authController.getCurrentUser!.emailVerified) {
-                            _profileController.verifyUserEmail();
+                            _settingsController.verifyUserEmail();
                           } else
                             VvcSnackBar.showSnackBar(
                                 title: "Verification!",
@@ -208,7 +225,7 @@ class SettingsPage extends StatelessWidget {
               VvcCard(
                 onPressed: () async {
                   await Share.share(
-                      "Hey check out my account in VVC.\nMy id is : ${_profileController.user.id}");
+                      "Hey check out my account in VVC.\nMy username is : ${_settingsController.user.userName}");
                 },
                 child: ListTile(
                   title: Text("Share Account"),
@@ -300,13 +317,13 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   VvcSmallText(
                       text:
-                          "Copyright © ${_profileController.appName.toUpperCase()}, ${DateTime.now().year}"),
+                          "Copyright © ${_settingsController.appName.toUpperCase()}, ${DateTime.now().year}"),
                   SizedBox(
                     height: 4,
                   ),
                   VvcSmallText(
                       text:
-                          "Version: ${_profileController.version}+${_profileController.buildNumber}"),
+                          "Version: ${_settingsController.version}+${_settingsController.buildNumber}"),
                 ],
               ),
               VvcStyle.defaultVerticalSpacer,
@@ -317,9 +334,47 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
+  Form _changeNameForm() {
+    return Form(
+      key: _settingsController.nameFormKey,
+      child: Column(
+        children: [
+          VvcStyle.defaultVerticalSpacer,
+          VvcSubHeading(
+              text:
+                  "Change your name. This will change the account name, Not your card names!"),
+          VvcStyle.defaultVerticalSpacer,
+          VvcTextFormField(
+            controller: _settingsController.nameTextEditingController,
+            label: "New Name",
+            onValidate: (value) {
+              if (value!.length < 3) {
+                return "Name must be at least 3 characters long";
+              }
+            },
+          ),
+          VvcStyle.defaultVerticalSpacer,
+          VvcElevatedButton.text(
+            label: "Change Name",
+            onPressed: () {
+              if (_settingsController.nameFormKey.currentState!.validate()) {
+                Get.back();
+
+                _settingsController.updateUserDefaultName(
+                  name:
+                      _settingsController.nameTextEditingController.text.trim(),
+                );
+              }
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   Form _changeEmailForm() {
     return Form(
-      key: _profileController.emailFormKey,
+      key: _settingsController.emailFormKey,
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -330,19 +385,19 @@ class SettingsPage extends StatelessWidget {
                   textInputType: TextInputType.visiblePassword,
                   suffixIcon: IconButton(
                     onPressed: () {
-                      _profileController.currentPasswordObscure.value =
-                          !_profileController.currentPasswordObscure.value;
+                      _settingsController.currentPasswordObscure.value =
+                          !_settingsController.currentPasswordObscure.value;
                     },
                     icon: Icon(
-                      _profileController.currentPasswordObscure.value
+                      _settingsController.currentPasswordObscure.value
                           ? CupertinoIcons.eye_solid
                           : CupertinoIcons.eye_slash_fill,
                       color: VvcColors.primaryColor1,
                     ),
                   ),
-                  obscure: _profileController.currentPasswordObscure.value,
+                  obscure: _settingsController.currentPasswordObscure.value,
                   controller:
-                      _profileController.currentPasswordTextEditingController,
+                      _settingsController.currentPasswordTextEditingController,
                   label: "Current Password",
                   onValidate: (value) {
                     if (value!.length < 6) {
@@ -353,7 +408,7 @@ class SettingsPage extends StatelessWidget {
             VvcStyle.defaultVerticalSpacer,
             VvcTextFormField(
               textInputType: TextInputType.emailAddress,
-              controller: _profileController.emailTextEditingController,
+              controller: _settingsController.emailTextEditingController,
               label: "New Email",
               onValidate: (value) {
                 if (!GetUtils.isEmail(value!)) {
@@ -365,10 +420,72 @@ class SettingsPage extends StatelessWidget {
             VvcElevatedButton.text(
               label: "Change Email",
               onPressed: () {
-                if (_profileController.emailFormKey.currentState!.validate()) {
+                if (_settingsController.emailFormKey.currentState!.validate()) {
                   Get.back();
 
-                  _profileController.updateUserEmail();
+                  _settingsController.updateUserEmail();
+                }
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Form _changeUserNameForm() {
+    return Form(
+      key: _settingsController.userNameFormKey,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            VvcStyle.defaultVerticalSpacer,
+            VvcSubHeading(text: "Change Your username!"),
+            VvcStyle.defaultVerticalSpacer,
+            Obx(() => VvcTextFormField(
+                  textInputType: TextInputType.visiblePassword,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      _settingsController.currentPasswordObscure.value =
+                          !_settingsController.currentPasswordObscure.value;
+                    },
+                    icon: Icon(
+                      _settingsController.currentPasswordObscure.value
+                          ? CupertinoIcons.eye_solid
+                          : CupertinoIcons.eye_slash_fill,
+                      color: VvcColors.primaryColor1,
+                    ),
+                  ),
+                  obscure: _settingsController.currentPasswordObscure.value,
+                  controller:
+                      _settingsController.currentPasswordTextEditingController,
+                  label: "Current Password",
+                  onValidate: (value) {
+                    if (value!.length < 6) {
+                      return "Password is at least 6 characters long!";
+                    }
+                  },
+                )),
+            VvcStyle.defaultVerticalSpacer,
+            VvcTextFormField(
+              textInputType: TextInputType.text,
+              controller: _settingsController.userNameTextEditingController,
+              label: "New Username",
+              onValidate: (value) {
+                if (value!.length < 5) {
+                  return "User name is at least 5 characters long!";
+                }
+              },
+            ),
+            VvcStyle.defaultVerticalSpacer,
+            VvcElevatedButton.text(
+              label: "Change Username",
+              onPressed: () {
+                if (_settingsController.userNameFormKey.currentState!
+                    .validate()) {
+                  Get.back();
+
+                  _settingsController.updateUserName();
                 }
               },
             )
@@ -380,7 +497,7 @@ class SettingsPage extends StatelessWidget {
 
   Form _changePasswordForm() {
     return Form(
-      key: _profileController.passwordFormKey,
+      key: _settingsController.passwordFormKey,
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -391,19 +508,19 @@ class SettingsPage extends StatelessWidget {
                   textInputType: TextInputType.visiblePassword,
                   suffixIcon: IconButton(
                     onPressed: () {
-                      _profileController.currentPasswordObscure.value =
-                          !_profileController.currentPasswordObscure.value;
+                      _settingsController.currentPasswordObscure.value =
+                          !_settingsController.currentPasswordObscure.value;
                     },
                     icon: Icon(
-                      _profileController.currentPasswordObscure.value
+                      _settingsController.currentPasswordObscure.value
                           ? CupertinoIcons.eye_solid
                           : CupertinoIcons.eye_slash_fill,
                       color: VvcColors.primaryColor1,
                     ),
                   ),
-                  obscure: _profileController.currentPasswordObscure.value,
+                  obscure: _settingsController.currentPasswordObscure.value,
                   controller:
-                      _profileController.currentPasswordTextEditingController,
+                      _settingsController.currentPasswordTextEditingController,
                   label: "Current Password",
                   onValidate: (value) {
                     if (value!.length < 6) {
@@ -416,19 +533,19 @@ class SettingsPage extends StatelessWidget {
                   textInputType: TextInputType.visiblePassword,
                   suffixIcon: IconButton(
                     onPressed: () {
-                      _profileController.newPasswordObscure.value =
-                          !_profileController.newPasswordObscure.value;
+                      _settingsController.newPasswordObscure.value =
+                          !_settingsController.newPasswordObscure.value;
                     },
                     icon: Icon(
-                      _profileController.newPasswordObscure.value
+                      _settingsController.newPasswordObscure.value
                           ? CupertinoIcons.eye_solid
                           : CupertinoIcons.eye_slash_fill,
                       color: VvcColors.primaryColor1,
                     ),
                   ),
-                  obscure: _profileController.newPasswordObscure.value,
+                  obscure: _settingsController.newPasswordObscure.value,
                   controller:
-                      _profileController.newPasswordTextEditingController,
+                      _settingsController.newPasswordTextEditingController,
                   label: "New Password",
                   onValidate: (value) {
                     if (value!.length < 6) {
@@ -441,26 +558,26 @@ class SettingsPage extends StatelessWidget {
                   textInputType: TextInputType.visiblePassword,
                   suffixIcon: IconButton(
                     onPressed: () {
-                      _profileController.confirmPasswordObscure.value =
-                          !_profileController.confirmPasswordObscure.value;
+                      _settingsController.confirmPasswordObscure.value =
+                          !_settingsController.confirmPasswordObscure.value;
                     },
                     icon: Icon(
-                      _profileController.confirmPasswordObscure.value
+                      _settingsController.confirmPasswordObscure.value
                           ? CupertinoIcons.eye_solid
                           : CupertinoIcons.eye_slash_fill,
                       color: VvcColors.primaryColor1,
                     ),
                   ),
-                  obscure: _profileController.confirmPasswordObscure.value,
-                  controller: _profileController
+                  obscure: _settingsController.confirmPasswordObscure.value,
+                  controller: _settingsController
                       .newConfirmPasswordTextEditingController,
                   label: "Confirm New Password",
                   onValidate: (value) {
                     if (value!.length < 6) {
                       return "Password is at least 6 characters long!";
-                    } else if (_profileController
+                    } else if (_settingsController
                             .newPasswordTextEditingController.text !=
-                        _profileController
+                        _settingsController
                             .newConfirmPasswordTextEditingController.text) {
                       return "Passwords don't match!";
                     }
@@ -470,11 +587,11 @@ class SettingsPage extends StatelessWidget {
             VvcElevatedButton.text(
               label: "Change Password",
               onPressed: () {
-                if (_profileController.passwordFormKey.currentState!
+                if (_settingsController.passwordFormKey.currentState!
                     .validate()) {
                   Get.back();
 
-                  _profileController.updateUserPassword();
+                  _settingsController.updateUserPassword();
                 }
               },
             )
@@ -482,56 +599,5 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Obx _nameSection() {
-    return Obx(() => VvcCard(
-          onPressed: () {
-            VvcBottomSheet.showBottomSheet(
-                child: Form(
-              key: _profileController.nameFormKey,
-              child: Column(
-                children: [
-                  VvcStyle.defaultVerticalSpacer,
-                  VvcSubHeading(
-                      text:
-                          "Change your name. This will change the account name, Not your card names!"),
-                  VvcStyle.defaultVerticalSpacer,
-                  VvcTextFormField(
-                    controller: _profileController.nameTextEditingController,
-                    label: "New Name",
-                    onValidate: (value) {
-                      if (value!.length < 3) {
-                        return "Name must be at least 3 characters long";
-                      }
-                    },
-                  ),
-                  VvcStyle.defaultVerticalSpacer,
-                  VvcElevatedButton.text(
-                    label: "Update",
-                    onPressed: () {
-                      if (_profileController.nameFormKey.currentState!
-                          .validate()) {
-                        Get.back();
-
-                        _profileController.updateUserName(
-                          name: _profileController
-                              .nameTextEditingController.text
-                              .trim(),
-                        );
-                      }
-                    },
-                  )
-                ],
-              ),
-            ));
-          },
-          child: ListTile(
-            title: Text("Name"),
-            subtitle: VvcSmallText(text: "Tap to change your name."),
-            trailing:
-                VvcSmallText(text: _profileController.user.name ?? "No name"),
-          ),
-        ));
   }
 }

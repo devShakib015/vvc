@@ -52,7 +52,6 @@ class SignUpPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               VvcStyle.defaultVerticalSpacer,
-              VvcStyle.defaultVerticalSpacer,
 
               //Logo
               Container(
@@ -65,6 +64,9 @@ class SignUpPage extends StatelessWidget {
               VvcStyle.defaultVerticalSpacer,
               _emailTextfieldSection(),
               VvcStyle.defaultVerticalSpacer,
+              _userNameTextfieldSection(),
+              VvcStyle.defaultVerticalSpacer,
+
               _passwordTextfieldSection(),
               VvcStyle.defaultVerticalSpacer,
               _confirmPassTextfieldSection(),
@@ -94,6 +96,20 @@ class SignUpPage extends StatelessWidget {
       onValidate: (text) {
         if (!GetUtils.isEmail(text!)) {
           return "Invalid Email!";
+        }
+      },
+    );
+  }
+
+  VvcTextFormField _userNameTextfieldSection() {
+    return VvcTextFormField(
+      controller: _authController.signUpUserNameController,
+      label: "User Name",
+      icon: Icons.perm_identity,
+      textInputType: TextInputType.emailAddress,
+      onValidate: (text) {
+        if (text!.length < 5) {
+          return "Username must be at least 5 characters long!";
         }
       },
     );

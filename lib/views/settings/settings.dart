@@ -63,7 +63,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               //!My Account
 
-              VvcMenuTitleCard(child: VvcSubHeading(text: "My Account")),
+              VvcMenuTitleCard(child: VvcSubHeading(text: "my_account".tr)),
 
               //!Name Card
 
@@ -74,17 +74,19 @@ class SettingsPage extends StatelessWidget {
                   );
                 },
                 child: Obx(() => ListTile(
-                      title: Text("Name"),
+                      title: Text("settings_name".tr),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: VvcSmallText(text: "Tap to change name."),
+                            child:
+                                VvcSmallText(text: "settings_name_subtitle".tr),
                           ),
                           VvcStyle.defaultHorizontalSpacer,
                           VvcSmallText(
-                              text: _settingsController.user.name ?? "No name")
+                              text: _settingsController.user.name ??
+                                  "settings_no_name".tr)
                         ],
                       ),
                     )),
@@ -95,9 +97,9 @@ class SettingsPage extends StatelessWidget {
               VvcCard(
                 onPressed: _settingsController.updateUserProfilePic,
                 child: Obx(() => ListTile(
-                      title: Text("Profile Picture"),
+                      title: Text("settings_profile_picture".tr),
                       subtitle: VvcSmallText(
-                          text: "Tap to upload a new profile picture."),
+                          text: "settings_profile_picture_subtitle".tr),
                       trailing: _settingsController.user.profilePicUrl != null
                           ? CircleAvatar(
                               backgroundImage: NetworkImage(
@@ -120,13 +122,14 @@ class SettingsPage extends StatelessWidget {
                   VvcBottomSheet.showBottomSheet(child: _changeEmailForm());
                 },
                 child: Obx(() => ListTile(
-                      title: Text("Email"),
+                      title: Text("settings_email".tr),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                            child: VvcSmallText(text: "Tap to change email."),
+                            child: VvcSmallText(
+                                text: "settings_email_subtitle".tr),
                           ),
                           VvcStyle.defaultHorizontalSpacer,
                           VvcSmallText(text: _settingsController.user.email),
@@ -144,19 +147,20 @@ class SettingsPage extends StatelessWidget {
                   );
                   VvcSnackBar.showSnackBar(
                       title: "Clipboard",
-                      message: "ID is copied to clipboard!");
+                      message: "settings_user_name_copy".tr);
                 },
                 onPressed: () {
                   VvcBottomSheet.showBottomSheet(child: _changeUserNameForm());
                 },
                 child: Obx(() => ListTile(
-                      title: Text("User Name"),
+                      title: Text("settings_user_name".tr),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                              child: VvcSmallText(text: "Long press to copy.")),
+                              child: VvcSmallText(
+                                  text: "settings_user_name_subtitle".tr)),
                           VvcStyle.defaultHorizontalSpacer,
                           VvcSmallText(text: _settingsController.user.userName),
                         ],
@@ -173,8 +177,8 @@ class SettingsPage extends StatelessWidget {
                   child: ListTile(
                     title:
                         _authController.getCurrentUser!.providerData.length == 1
-                            ? Text("Created by")
-                            : Text("Account Provider ${i + 1}"),
+                            ? Text("settings_created_by".tr)
+                            : Text("settings_provide_by".tr + "${i + 1}"),
                     trailing: VvcSmallText(
                         text: _authController
                             .getCurrentUser!.providerData[i].providerId),
@@ -185,7 +189,7 @@ class SettingsPage extends StatelessWidget {
 
               VvcCard(
                 child: ListTile(
-                  title: Text("Created at"),
+                  title: Text("settings_created_at".tr),
                   trailing: VvcSmallText(
                       text: _authController
                           .getCurrentUser!.metadata.creationTime
@@ -198,7 +202,7 @@ class SettingsPage extends StatelessWidget {
 
               VvcCard(
                 child: ListTile(
-                  title: Text("Last Logged in at"),
+                  title: Text("settings_last_logged_in".tr),
                   trailing: VvcSmallText(
                       text: _authController
                           .getCurrentUser!.metadata.lastSignInTime
@@ -209,7 +213,8 @@ class SettingsPage extends StatelessWidget {
 
               //!Account Actions
 
-              VvcMenuTitleCard(child: VvcSubHeading(text: "Account Actions")),
+              VvcMenuTitleCard(
+                  child: VvcSubHeading(text: "settings_account_actions".tr)),
 
               //!Account Verification Card
 
@@ -220,17 +225,19 @@ class SettingsPage extends StatelessWidget {
                             _settingsController.verifyUserEmail();
                           } else
                             VvcSnackBar.showSnackBar(
-                                title: "Verification!",
-                                message: "Your account is already verified!");
+                                title: "settings_verification_title".tr,
+                                message: "settings_already_verified".tr);
                         },
                         child: ListTile(
                           title: _authController.getCurrentUser!.emailVerified
-                              ? Text("Account is Verified!")
-                              : Text("Unverified Account!"),
-                          subtitle:
-                              _authController.getCurrentUser!.emailVerified
-                                  ? null
-                                  : Text("Verify Your accout now!"),
+                              ? Text("settings_account_verified".tr)
+                              : Text("settings_account_not_verified".tr),
+                          subtitle: _authController
+                                  .getCurrentUser!.emailVerified
+                              ? null
+                              : VvcSmallText(
+                                  text:
+                                      "settings_account_verified_subtitle".tr),
                           trailing:
                               _authController.getCurrentUser!.emailVerified
                                   ? Icon(
@@ -258,7 +265,7 @@ class SettingsPage extends StatelessWidget {
                               child: _changePasswordForm());
                         },
                         child: ListTile(
-                          title: Text("Change Password"),
+                          title: Text("settings_change_password".tr),
                           trailing: Icon(FontAwesomeIcons.keycdn),
                         ),
                       )
@@ -272,14 +279,15 @@ class SettingsPage extends StatelessWidget {
                       "Hey check out my account in VVC.\nMy username is : ${_settingsController.user.userName}");
                 },
                 child: ListTile(
-                  title: Text("Share Account"),
+                  title: Text("settings_share_account".tr),
                   trailing: Icon(CupertinoIcons.share_up),
                 ),
               ),
 
               //!App Actions
 
-              VvcMenuTitleCard(child: VvcSubHeading(text: "App Actions")),
+              VvcMenuTitleCard(
+                  child: VvcSubHeading(text: "settings_app_actions".tr)),
 
               //!Onboarding Card
 
@@ -290,11 +298,11 @@ class SettingsPage extends StatelessWidget {
                     },
                     child: Get.find<StorageController>().isOnBoardingShown
                         ? ListTile(
-                            title: Text("Turn On Onboarding!"),
+                            title: Text("settings_on_onboarding".tr),
                             trailing: Icon(Icons.toggle_off),
                           )
                         : ListTile(
-                            title: Text("Turn Off Onboarding!"),
+                            title: Text("settings_off_onboarding".tr),
                             trailing: Icon(Icons.toggle_on),
                           ),
                   )),
@@ -307,7 +315,7 @@ class SettingsPage extends StatelessWidget {
                       child: Container(
                     child: Column(
                       children: [
-                        VvcSubHeading(text: "Select Language!"),
+                        VvcSubHeading(text: "settings_select_language".tr),
                         Expanded(
                           child: ListView(
                             children: vvcLanguages.map((language) {
@@ -336,14 +344,15 @@ class SettingsPage extends StatelessWidget {
                   ));
                 },
                 child: ListTile(
-                  title: Text("Change Language"),
+                  title: Text("settings_language".tr),
                   trailing: Icon(Icons.translate_rounded),
                 ),
               ),
 
               //!About App
 
-              VvcMenuTitleCard(child: VvcSubHeading(text: "About App")),
+              VvcMenuTitleCard(
+                  child: VvcSubHeading(text: "settings_about_app".tr)),
 
               //!About card
 
@@ -356,7 +365,7 @@ class SettingsPage extends StatelessWidget {
                   );
                 },
                 child: ListTile(
-                  title: Text("About VVC"),
+                  title: Text("settings_about_vvc".tr),
                   trailing: Icon(Icons.business),
                 ),
               ),
@@ -366,12 +375,12 @@ class SettingsPage extends StatelessWidget {
               VvcCard(
                 onPressed: () {
                   VvcBottomSheet.showBottomSheet(
-                    name: "Terms And Condition Bottom Sheet",
+                    name: "Privacy Bottom Sheet",
                     child: Markdown(data: TermsAndCondition.text),
                   );
                 },
                 child: ListTile(
-                  title: Text("Privacy Policy"),
+                  title: Text("settings_privacy".tr),
                   trailing: Icon(Icons.security),
                 ),
               ),
@@ -386,26 +395,26 @@ class SettingsPage extends StatelessWidget {
                   );
                 },
                 child: ListTile(
-                  title: Text("Terms And Conditions"),
+                  title: Text("settings_terms".tr),
                   trailing: Icon(Icons.gavel),
                 ),
               ),
 
               //!Danger Zone
-              VvcMenuTitleCard(child: VvcSubHeading(text: "See ya!")),
+              VvcMenuTitleCard(
+                  child: VvcSubHeading(text: "settings_see_ya".tr)),
 
               VvcCard(
                 onPressed: () {
                   VvcDialog.showConfirmDialog(
-                    title: "Are you sure to log out?",
+                    title: "settings_logout_confirmation".tr,
                     onConfirmPressed: () async {
-                      print("Helllo");
                       await Get.find<AuthController>().logOut();
                     },
                   );
                 },
                 child: ListTile(
-                  title: Text("Log Out"),
+                  title: Text("settings_logout".tr),
                   trailing: Icon(Icons.logout),
                 ),
               ),
@@ -440,22 +449,20 @@ class SettingsPage extends StatelessWidget {
       child: Column(
         children: [
           VvcStyle.defaultVerticalSpacer,
-          VvcSubHeading(
-              text:
-                  "Change your name. This will change the account name, Not your card names!"),
+          VvcSubHeading(text: "settings_name_change_title".tr),
           VvcStyle.defaultVerticalSpacer,
           VvcTextFormField(
             controller: _settingsController.nameTextEditingController,
-            label: "New Name",
+            label: "settings_name_change_new_name".tr,
             onValidate: (value) {
               if (value!.length < 3) {
-                return "Name must be at least 3 characters long";
+                return "settings_name_change_new_name_error".tr;
               }
             },
           ),
           VvcStyle.defaultVerticalSpacer,
           VvcElevatedButton.text(
-            label: "Change Name",
+            label: "settings_name_change".tr,
             onPressed: () {
               if (_settingsController.nameFormKey.currentState!.validate()) {
                 Get.back();
@@ -479,7 +486,7 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           children: [
             VvcStyle.defaultVerticalSpacer,
-            VvcSubHeading(text: "Change Your Email!"),
+            VvcSubHeading(text: "settings_email_change_title".tr),
             VvcStyle.defaultVerticalSpacer,
             Obx(() => VvcTextFormField(
                   textInputType: TextInputType.visiblePassword,
@@ -498,10 +505,10 @@ class SettingsPage extends StatelessWidget {
                   obscure: _settingsController.currentPasswordObscure.value,
                   controller:
                       _settingsController.currentPasswordTextEditingController,
-                  label: "Current Password",
+                  label: "settings_email_change_current_password".tr,
                   onValidate: (value) {
                     if (value!.length < 6) {
-                      return "Password is at least 6 characters long!";
+                      return "settings_email_change_current_password_error".tr;
                     }
                   },
                 )),
@@ -509,16 +516,16 @@ class SettingsPage extends StatelessWidget {
             VvcTextFormField(
               textInputType: TextInputType.emailAddress,
               controller: _settingsController.emailTextEditingController,
-              label: "New Email",
+              label: "settings_email_change_new_email".tr,
               onValidate: (value) {
                 if (!GetUtils.isEmail(value!)) {
-                  return "Invalid Email!";
+                  return "settings_email_change_new_email_error".tr;
                 }
               },
             ),
             VvcStyle.defaultVerticalSpacer,
             VvcElevatedButton.text(
-              label: "Change Email",
+              label: "settings_email_change".tr,
               onPressed: () {
                 if (_settingsController.emailFormKey.currentState!.validate()) {
                   Get.back();
@@ -540,7 +547,7 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           children: [
             VvcStyle.defaultVerticalSpacer,
-            VvcSubHeading(text: "Change Your username!"),
+            VvcSubHeading(text: "settings_username_change_title".tr),
             VvcStyle.defaultVerticalSpacer,
             Obx(() => VvcTextFormField(
                   textInputType: TextInputType.visiblePassword,
@@ -559,10 +566,11 @@ class SettingsPage extends StatelessWidget {
                   obscure: _settingsController.currentPasswordObscure.value,
                   controller:
                       _settingsController.currentPasswordTextEditingController,
-                  label: "Current Password",
+                  label: "settings_username_change_current_password".tr,
                   onValidate: (value) {
                     if (value!.length < 6) {
-                      return "Password is at least 6 characters long!";
+                      return "settings_username_change_current_password_error"
+                          .tr;
                     }
                   },
                 )),
@@ -570,16 +578,16 @@ class SettingsPage extends StatelessWidget {
             VvcTextFormField(
               textInputType: TextInputType.text,
               controller: _settingsController.userNameTextEditingController,
-              label: "New Username",
+              label: "settings_username_change_new_username".tr,
               onValidate: (value) {
                 if (value!.length < 5) {
-                  return "User name is at least 5 characters long!";
+                  return "settings_username_change_new_username_error".tr;
                 }
               },
             ),
             VvcStyle.defaultVerticalSpacer,
             VvcElevatedButton.text(
-              label: "Change Username",
+              label: "settings_username_change".tr,
               onPressed: () {
                 if (_settingsController.userNameFormKey.currentState!
                     .validate()) {
@@ -602,7 +610,7 @@ class SettingsPage extends StatelessWidget {
         child: Column(
           children: [
             VvcStyle.defaultVerticalSpacer,
-            VvcSubHeading(text: "Change Your Password!"),
+            VvcSubHeading(text: "settings_password_change_title".tr),
             VvcStyle.defaultVerticalSpacer,
             Obx(() => VvcTextFormField(
                   textInputType: TextInputType.visiblePassword,
@@ -621,10 +629,11 @@ class SettingsPage extends StatelessWidget {
                   obscure: _settingsController.currentPasswordObscure.value,
                   controller:
                       _settingsController.currentPasswordTextEditingController,
-                  label: "Current Password",
+                  label: "settings_password_change_current_password".tr,
                   onValidate: (value) {
                     if (value!.length < 6) {
-                      return "Password is at least 6 characters long!";
+                      return "settings_password_change_current_password_error"
+                          .tr;
                     }
                   },
                 )),
@@ -646,10 +655,10 @@ class SettingsPage extends StatelessWidget {
                   obscure: _settingsController.newPasswordObscure.value,
                   controller:
                       _settingsController.newPasswordTextEditingController,
-                  label: "New Password",
+                  label: "settings_password_change_new_password".tr,
                   onValidate: (value) {
                     if (value!.length < 6) {
-                      return "Password is at least 6 characters long!";
+                      return "settings_password_change_new_password_error".tr;
                     }
                   },
                 )),
@@ -671,21 +680,22 @@ class SettingsPage extends StatelessWidget {
                   obscure: _settingsController.confirmPasswordObscure.value,
                   controller: _settingsController
                       .newConfirmPasswordTextEditingController,
-                  label: "Confirm New Password",
+                  label: "settings_password_change_confirm_password".tr,
                   onValidate: (value) {
                     if (value!.length < 6) {
-                      return "Password is at least 6 characters long!";
+                      return "settings_password_change_confirm_password_error"
+                          .tr;
                     } else if (_settingsController
                             .newPasswordTextEditingController.text !=
                         _settingsController
                             .newConfirmPasswordTextEditingController.text) {
-                      return "Passwords don't match!";
+                      return "settings_password_change_dont_match".tr;
                     }
                   },
                 )),
             VvcStyle.defaultVerticalSpacer,
             VvcElevatedButton.text(
-              label: "Change Password",
+              label: "settings_password_change".tr,
               onPressed: () {
                 if (_settingsController.passwordFormKey.currentState!
                     .validate()) {

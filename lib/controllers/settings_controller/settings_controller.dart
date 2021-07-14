@@ -106,7 +106,7 @@ class SettingsController extends GetxController {
       VvcDialog.hideLoading();
       clearFields();
       VvcSnackBar.showSnackBar(
-          title: "Success!", message: "Name is successfully updated!");
+          title: "success".tr, message: "settings_name_change_success".tr);
     } catch (e) {
       VvcDialog.hideLoading();
       VvcSnackBar.showErrorSnackBar(message: "error".tr);
@@ -146,8 +146,8 @@ class SettingsController extends GetxController {
             VvcDialog.hideLoading();
 
             VvcSnackBar.showSnackBar(
-                title: "Success!",
-                message: "Profile Picture is successfully updated!");
+                title: "success".tr,
+                message: "settings_profile_picture_change_success".tr);
           });
         });
       });
@@ -185,14 +185,12 @@ class SettingsController extends GetxController {
           clearFields();
 
           VvcSnackBar.showSnackBar(
-              title: "Success!",
-              message: "Email is successfully changed to new one!");
+              title: "success".tr, message: "settings_email_change_success".tr);
         } on FirebaseAuthException catch (e) {
           VvcDialog.hideLoading();
           if (e.code == "email-already-in-use") {
             VvcSnackBar.showErrorSnackBar(
-              message:
-                  "Email is already in use. Please try again with different email!",
+              message: "settings_email_change_already_in_use".tr,
               durationInSecond: 3,
             );
           }
@@ -202,13 +200,12 @@ class SettingsController extends GetxController {
       VvcDialog.hideLoading();
       if (e.code == "wrong-password") {
         VvcSnackBar.showErrorSnackBar(
-          message: "Your current password is not what we have in our system!",
+          message: "settings_email_change_wrong_password".tr,
           durationInSecond: 2,
         );
       } else {
         VvcSnackBar.showErrorSnackBar(
-          message:
-              "Don't cross your limit to do such tasks again! We have blocked you for a while. Try again later!",
+          message: "settings_email_change_cross_limit".tr,
           durationInSecond: 3,
         );
       }
@@ -231,7 +228,8 @@ class SettingsController extends GetxController {
 
         if (isUserAvailable) {
           VvcDialog.hideLoading();
-          VvcSnackBar.showErrorSnackBar(message: "User name is already taken!");
+          VvcSnackBar.showErrorSnackBar(
+              message: "settings_username_change_already_in_use".tr);
         } else {
           await FirebaseConstants.userCollection.doc(_user.value.id).update(
                 UserModel(
@@ -252,21 +250,20 @@ class SettingsController extends GetxController {
           clearFields();
 
           VvcSnackBar.showSnackBar(
-              title: "Success!",
-              message: "User name is successfully changed to new one!");
+              title: "success".tr,
+              message: "settings_username_change_success".tr);
         }
       });
     } on FirebaseAuthException catch (e) {
       VvcDialog.hideLoading();
       if (e.code == "wrong-password") {
         VvcSnackBar.showErrorSnackBar(
-          message: "Your current password is not what we have in our system!",
+          message: "settings_username_change_wrong_password".tr,
           durationInSecond: 2,
         );
       } else {
         VvcSnackBar.showErrorSnackBar(
-          message:
-              "Don't cross your limit to do such tasks again! We have blocked you for a while. Try again later!",
+          message: "settings_username_change_cross_limit".tr,
           durationInSecond: 3,
         );
       }
@@ -279,10 +276,9 @@ class SettingsController extends GetxController {
       await _authController.getCurrentUser!.sendEmailVerification();
 
       VvcSnackBar.showSnackBar(
-          title: "Verification!",
+          title: "settings_verification_title".tr,
           durationInSecond: 4,
-          message:
-              "A verification link is sent to your email. Click the link and verify it!\nLog out and login again to see the effect!");
+          message: "settings_verification_message".tr);
     } catch (e) {
       VvcSnackBar.showErrorSnackBar(message: "error".tr);
     }
@@ -306,20 +302,19 @@ class SettingsController extends GetxController {
         clearFields();
 
         VvcSnackBar.showSnackBar(
-            title: "Success!",
-            message: "Password is successfully chnaged to new one!");
+            title: "success".tr,
+            message: "settings_password_change_success".tr);
       });
     } on FirebaseAuthException catch (e) {
       VvcDialog.hideLoading();
       if (e.code == "wrong-password") {
         VvcSnackBar.showErrorSnackBar(
-          message: "Your current password is not what we have in our system!",
+          message: "settings_password_change_wrong_password".tr,
           durationInSecond: 2,
         );
       } else {
         VvcSnackBar.showErrorSnackBar(
-          message:
-              "Don't cross your limit to do such tasks again! We have blocked you for a while. Try again later!",
+          message: "settings_password_change_cross_limit".tr,
           durationInSecond: 3,
         );
       }

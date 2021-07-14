@@ -88,8 +88,8 @@ class VvcDialog {
 
   static void showConfirmDialog({
     required String title,
-    String confirmButtonText = "Yes",
-    String cancelButtonText = "Cancel",
+    String? confirmButtonText,
+    String? cancelButtonText,
     TextStyle? confirmButtonTextStyle,
     TextStyle? cancelButtonTextStyle,
     required VoidCallback onConfirmPressed,
@@ -128,7 +128,7 @@ class VvcDialog {
                           }
                         : onCancelPressed,
                     child: Text(
-                      cancelButtonText,
+                      cancelButtonText ?? "cancel".tr,
                       style: cancelButtonTextStyle,
                     ),
                   ),
@@ -138,7 +138,7 @@ class VvcDialog {
                     ),
                     onPressed: onConfirmPressed,
                     child: Text(
-                      confirmButtonText,
+                      "yes".tr,
                       style: confirmButtonTextStyle,
                     ),
                   ),
